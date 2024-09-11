@@ -1,8 +1,6 @@
-import 'package:promaparams_app/models/models.dart';
 import 'package:promaparams_app/providers/providers.dart';
 import 'package:promaparams_app/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class RegisteredBinGuiasProvider extends ChangeNotifier {
   List<RegisteredBinGuias> binAsignadosReg = [];

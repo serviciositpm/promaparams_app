@@ -41,7 +41,7 @@ class AuthBackground extends StatelessWidget {
 
 //este sera el contenedor Morado que viene en el Login
 class _PurpleBox extends StatelessWidget {
-  const _PurpleBox({super.key});
+  const _PurpleBox();
 
   @override
   Widget build(BuildContext context) {

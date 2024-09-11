@@ -1,7 +1,6 @@
 import 'dart:convert' as convert;
 import 'package:promaparams_app/providers/providers.dart';
 import 'package:http/http.dart' as http;
-import 'package:promaparams_app/models/models.dart';
 
 //class DataGuiasRegServices extends ChangeNotifier {
 class DataGuiasRegServicesCMP {

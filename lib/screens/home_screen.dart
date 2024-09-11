@@ -1,9 +1,7 @@
 /* import 'package:bines_app/providers/providers.dart'; */
-import 'package:promaparams_app/providers/providers.dart';
 import 'package:promaparams_app/routes/app_routes.dart';
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 /* import 'package:provider/provider.dart'; */
 
 class HomeScreen extends StatelessWidget {

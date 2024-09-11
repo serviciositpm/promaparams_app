@@ -5,6 +5,7 @@ import 'package:promaparams_app/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:promaparams_app/services/valida_login_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -61,7 +62,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _LoginForm extends StatelessWidget {
-  const _LoginForm({super.key});
+  const _LoginForm();
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +81,8 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
-                  hintText: 'usuario-cedula',
-                  labelText: 'Usuario/Cedula',
+                  hintText: 'usuario',
+                  labelText: 'Usuario',
                   prefixIcon: Icons.alternate_email_sharp),
               //Tomar os valores de las cajas de Texto
               onChanged: (value) => loginForm.email = value,
@@ -148,6 +149,10 @@ class _LoginForm extends StatelessWidget {
 
                         final jsonData = await jsonDecode(response.body);
                         if (jsonData['codmsg'] == 200) {
+                          // Almacenar el usuario en SharedPreferences
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          await prefs.setString('user', loginForm.email);
                           // El login fue exitoso
                           //Permite acceder a la pantalla siguiente sin que permita regresar a la anaterior
                           // ignore: use_build_context_synchronously
