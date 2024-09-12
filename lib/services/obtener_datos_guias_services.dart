@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert' as convert;
 import 'package:promaparams_app/providers/providers.dart';
 import 'package:http/http.dart' as http;
@@ -37,10 +39,8 @@ class DataGuiasRegServicesCMP {
     /* final response = await http.get(Uri.parse(_baseUrl)); */
     final List<dynamic> listguiasMap = convert.jsonDecode(responseGuias.body);
     await DBProvider.db.borrarGuiasPesca('', opcion);
-    print("Ingreso a Borrrar  =>> $opcion ");
     if (listguiasMap.isNotEmpty) {
       //Borramos los datos de las tablas no sincronziadas
-      //TODO : Borrar los datos de las guias no sincronizadas
       //Recorremos el Json y Realizamos el Insert
       for (Map<String, dynamic> guias in listguiasMap) {
         /*
@@ -247,7 +247,6 @@ class DataGuiasRegServicesCMP {
     final List<dynamic> decodedResp = convert.json.decode(response.body);
     final dynamic cod = decodedResp[0]['codmsg'];
     if (cod == 200) {
-      print('Se Inserto los Registros Normalmente');
       final binesAct = await RegisteredBinGuiasProvider()
           .actualizarEstadosRegBin(nroguia, tipoproceso, 0, 1);
 
