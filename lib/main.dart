@@ -45,6 +45,12 @@ class MyApp extends StatelessWidget {
         'login': (_) => const LoginScreen(), //Pantalla de Logueo
         /* 'register': (_) => const RegisterScreen(), */ //Registro de Nuevo Uuario
         'home': (_) => const HomeScreen(), //Pagina Principal lista de Opciones
+        'obtainregisteredforms': (_) => const RegisteredFormsScreen(
+              codCamaronera: '',
+              descCamaronera: '',
+              descParametro: '',
+              codParametro: '',
+            ), //Pagina Principal lista de Opciones
         /* 'registerbin': (_) =>
             const AssigmentScreen(), //Registro de Bines Paso 1 */
         /* 'exitplant': (_) =>

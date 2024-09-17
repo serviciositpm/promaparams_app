@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:promaparams_app/screens/screens.dart';
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:promaparams_app/ui/icon_mapper.dart';
 import 'package:provider/provider.dart';
@@ -65,9 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: DropdownButtonFormField<String>(
-                      value: camaronerasProvider.camaroneras.isEmpty
-                          ? null
-                          : camaronerasProvider.camaroneras[0]['codCamaronera'],
+                      value: camaronerasProvider.selectedCamaronera,
                       hint: const Text('Selecciona una camaronera'),
                       items: camaronerasProvider.camaroneras.map((camaronera) {
                         return DropdownMenuItem<String>(
@@ -77,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }).toList(),
                       onChanged: (value) {
                         if (value != null) {
+                          camaronerasProvider.setSelectedCamaronera(value);
                           camaronerasProvider.loadParametros(
                               userProvider.usuario!, value);
                         }
@@ -98,7 +98,38 @@ class _HomeScreenState extends State<HomeScreen> {
                           title: Text(parametro['descParametro']),
                           leading: Icon(icon),
                           onTap: () {
-                            Navigator.pushNamed(context, parametro['route']);
+                            final codParametro =
+                                parametro['codParametro']; // Conversión segura
+
+                            if (codParametro != null &&
+                                camaronerasProvider.selectedCamaronera !=
+                                    null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RegisteredFormsScreen(
+                                    codCamaronera:
+                                        camaronerasProvider.selectedCamaronera!,
+                                    descCamaronera: camaronerasProvider
+                                            .camaroneras
+                                            .firstWhere((cam) =>
+                                                cam['codCamaronera'] ==
+                                                camaronerasProvider
+                                                    .selectedCamaronera)[
+                                        'desCamaronera'],
+                                    descParametro: parametro['descParametro'],
+                                    codParametro:
+                                        codParametro, // Pasamos el int
+                                  ),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Error: El parámetro no es un número válido o no se seleccionó una camaronera')),
+                              );
+                            }
                           },
                         );
                       },

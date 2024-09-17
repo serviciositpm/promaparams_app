@@ -7,11 +7,24 @@ class CamaronerasProvider with ChangeNotifier {
   bool _isLoadingCamaroneras = true;
   bool _isLoadingParametros = false;
 
+  String?
+      _selectedCamaronera; // Nuevo campo para almacenar la camaronera seleccionada
+
+  // Getters
   List<Map<String, dynamic>> get camaroneras => _camaroneras;
   List<Map<String, dynamic>> get parametros => _parametros;
   bool get isLoadingCamaroneras => _isLoadingCamaroneras;
   bool get isLoadingParametros => _isLoadingParametros;
+  String? get selectedCamaronera =>
+      _selectedCamaronera; // Getter para la camaronera seleccionada
 
+  // Método para seleccionar la camaronera
+  void setSelectedCamaronera(String? camaronera) {
+    _selectedCamaronera = camaronera;
+    notifyListeners();
+  }
+
+  // Cargar camaroneras
   Future<void> loadCamaroneras(String usuario) async {
     final apiService = ApiFarmService();
     _isLoadingCamaroneras = true;
@@ -27,6 +40,7 @@ class CamaronerasProvider with ChangeNotifier {
     }
   }
 
+  // Cargar parámetros según la camaronera seleccionada
   Future<void> loadParametros(String usuario, String camaronera) async {
     final apiService = ApiFarmService();
     _isLoadingParametros = true;
