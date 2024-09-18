@@ -45,6 +45,7 @@ class RegisteredParameteresProvider with ChangeNotifier {
       _registros = await _dbHelper.getRegistros();
     } catch (e) {
       // Manejo de error
+      // ignore: avoid_print
       print('Error cargando registros: $e');
     }
 

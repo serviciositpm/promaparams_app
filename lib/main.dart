@@ -15,17 +15,13 @@ class AppsState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        /*  ChangeNotifierProvider(create: (_) => AssiggrListProvider()),
-        ChangeNotifierProvider(create: (_) => BinGrAsignado()),
-        ChangeNotifierProvider(create: (_) => DataGuiasDayServices()),
-        ChangeNotifierProvider(create: (_) => DataGuiaBinServices()),
-        ChangeNotifierProvider(create: (_) => RegisteredGuiasProvider()), */
         ChangeNotifierProvider(create: (_) => ServicesProvider()),
-        ChangeNotifierProvider(create: (_) => ServicesProviderCMP()),
+        /* ChangeNotifierProvider(create: (_) => ServicesProviderCMP()), */
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => CamaronerasProvider()),
         ChangeNotifierProvider(create: (_) => RegisteredParameteresProvider()),
-        /* ChangeNotifierProvider(create: (_) => RegisteredBinGuiasProvider()), */
+        ChangeNotifierProvider(create: (_) => PoolProvider()),
+        ChangeNotifierProvider(create: (_) => CiclesProvider()),
       ],
       child: const MyApp(),
     );
@@ -51,6 +47,12 @@ class MyApp extends StatelessWidget {
               descParametro: '',
               codParametro: '',
             ), //Pagina Principal lista de Opciones
+        'addregistervaribales': (_) => const AddRegisterParamsVariables(
+              codCamaronera: '',
+              descCamaronera: '',
+              descParametro: '',
+              codParametro: '',
+            ),
         /* 'registerbin': (_) =>
             const AssigmentScreen(), //Registro de Bines Paso 1 */
         /* 'exitplant': (_) =>

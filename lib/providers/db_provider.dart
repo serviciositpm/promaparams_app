@@ -58,6 +58,7 @@ class DBProvider {
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
     //
     // In this case, replace any previous data.
+    // ignore: unused_local_variable
     final resp = await db.insert(
       'TiempoGuias',
       asignadas.toJson(),
@@ -79,12 +80,12 @@ class DBProvider {
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
     //
     // In this case, replace any previous data.
+    // ignore: unused_local_variable
     final resp = await db.insert(
       'GuiasReg',
       registradas.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print(resp);
     //print('Respuesta de la Insercion $resp');
 
     return registradas.nroguia;
@@ -109,6 +110,7 @@ class DBProvider {
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
     //
     // In this case, replace any previous data.
+    // ignore: unused_local_variable
     final resp = await db.rawInsert(
         'INSERT INTO GuiasReg(tipoproceso, nroguia,fechaguia,kg,piscina,cantescaneada,activo,sincronizado) VALUES(?, ?,?,?,?,?,?,?)',
         [
@@ -129,8 +131,8 @@ class DBProvider {
     );
     print(resp); */
     //print('Respuesta de la Insercion $resp');
-    print('Registros Manuales');
-    print(resp);
+    /* print('Registros Manuales');
+    print(resp); */
     return nroguia;
   }
 
@@ -172,7 +174,9 @@ class DBProvider {
     // Get a reference to the database.
     final db = await databaseRead;
 
-    //TODO : APlicar COndicion para q borre las que no han sido sincronizadas
+    /*
+    * APlicar COndicion para q borre las que no han sido sincronizadas
+    */
     final res = await db.delete(
       'TiempoGuias',
       where: 'tipoproceso = ? ',
@@ -192,7 +196,9 @@ class DBProvider {
     // Get a reference to the database.
     final db = await databaseRead;
 
-    //TODO : APlicar COndicion para q borre las que no han sido sincronizadas
+    /*
+    * APlicar COndicion para q borre las que no han sido sincronizadas
+    */
     final res = await db.delete(
       'GuiasReg',
       // Ensure that the Dog has a matching id.
@@ -210,8 +216,9 @@ class DBProvider {
   Future borrarRegGuiasDB(String tipoproceso, String nroguia) async {
     // Get a reference to the database.
     final db = await databaseRead;
-
-    //TODO : APlicar COndicion para q borre las que no han sido sincronizadas
+    /*
+    * APlicar COndicion para q borre las que no han sido sincronizadas
+    */
     final res = await db.delete(
       'GuiasReg',
       // Ensure that the Dog has a matching id.
@@ -230,6 +237,7 @@ class DBProvider {
     // Get a reference to the database.
     final db = await databaseRead;
     //'CREATE TABLE Assiggr(nroguia TEXT PRIMARY KEY, fecha TEXT, kg REAL,piscina TEXT,cant INT,sincronizado INT,activo INT) ',
+    // ignore: unused_local_variable
     final actualizado = await db.update(
         'Assiggr', {'sincronizado': sincronizado, 'activo': activo},
         where: 'nroguia = ?', whereArgs: [nroguia]);
@@ -244,6 +252,7 @@ class DBProvider {
     // Get a reference to the database.
     final db = await databaseRead;
     //'CREATE TABLE Assiggr(nroguia TEXT PRIMARY KEY, fecha TEXT, kg REAL,piscina TEXT,cant INT,sincronizado INT,activo INT) ',
+    // ignore: unused_local_variable
     final actualizado = await db.update(
         'GuiasReg', {'sincronizado': sincronizado, 'activo': activo},
         where: 'nroguia = ? And tipoproceso = ?',
@@ -265,6 +274,7 @@ class DBProvider {
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
     //
     // In this case, replace any previous data.
+    // ignore: unused_local_variable
     final resp = await db.insert(
       'BinesGrAsig',
       binasignadas.toJson(),
@@ -286,6 +296,7 @@ class DBProvider {
     // `conflictAlgorithm` to use in case the same dog is inserted twice.
     //
     // In this case, replace any previous data.
+    // ignore: unused_local_variable
     final resp = await db.insert(
       'BinReg',
       binasignadas.toJson(),
@@ -309,6 +320,7 @@ class DBProvider {
     if (res.isEmpty) {
       bines = 0;
     }
+    // ignore: unused_local_variable
     final actualizado = await db.update('Assiggr', {'cant': bines},
         where: 'nroguia = ?', whereArgs: [nroguia]);
     return bines;
@@ -328,6 +340,7 @@ class DBProvider {
     if (res.isEmpty) {
       bines = 0;
     }
+    // ignore: unused_local_variable
     final actualizado = await db.update('GuiasReg', {'cantescaneada': bines},
         where: 'nroguia = ? And tipoproceso = ? ',
         whereArgs: [nroguia, tipoproceso]);

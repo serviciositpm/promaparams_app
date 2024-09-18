@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:promaparams_app/providers/providers.dart';
-
 import '../themes/app_themes.dart';
+import 'package:promaparams_app/screens/screens.dart';
 
 class RegisteredFormsScreen extends StatefulWidget {
   final String codCamaronera;
@@ -76,6 +76,17 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddRegisterParamsVariables(
+                codCamaronera: widget.codCamaronera,
+                descCamaronera: widget.descCamaronera,
+                codParametro: widget.codParametro,
+                descParametro: widget.descParametro,
+              ),
+            ),
+          );
           /*  Navigator.push(
             context,
             MaterialPageRoute(
@@ -180,6 +191,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
           final registro = registrosProvider.registros[index];
           return GestureDetector(
             onTap: () {
+              // ignore: avoid_print
               print(
                   'Registro seleccionado: ${registro.piscina}, Ciclo: ${registro.ciclo}');
             },

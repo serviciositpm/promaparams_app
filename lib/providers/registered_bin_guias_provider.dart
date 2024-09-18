@@ -138,6 +138,7 @@ class RegisteredBinGuiasProvider extends ChangeNotifier {
         final double kg = guiasReg.registrados[index].kg;
         final String piscina = guiasReg.registrados[index].piscina;
         final int cantescaneada = guiasReg.registrados[index].cantescaneada;
+        // ignore: unused_local_variable
         final guiasRec = await RegisteredGuiasProvider().nuevaGuiaRegistrada(
             sigProceso, nroguia, fechaguia, kg, piscina, cantescaneada, 0, 1);
         //Leera e Insertara el detalle de los bines
@@ -149,6 +150,7 @@ class RegisteredBinGuiasProvider extends ChangeNotifier {
           final String tproces =
               datosGuiasReg.binAsignadosReg[index].tipoproceso;
           if (numGuia == guia && tproces == tipoProcesoEnv) {
+            // ignore: unused_local_variable
             final guiasBinReg =
                 nuevaGuiaBinAsignadoReg(sigProceso, nroguia, nrobin, '', 0, 1);
           }
@@ -168,9 +170,6 @@ class RegisteredBinGuiasProvider extends ChangeNotifier {
     //------------------------------
     //Recorro la matriz de las guia
     //------------------------------
-    var d = guiasReg.registrados.length;
-    print('Futoe de Envio $tipoProceso , $d');
-    int flag = 0;
     for (int indice = 0;
         indice <
             datosGuiasReg.binAsignadosReg

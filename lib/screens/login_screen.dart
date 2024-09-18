@@ -36,25 +36,6 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 50),
-          //TODO Se Elimina el Registrar Cuenta hasta los siguientes entregables
-          /* TextButton(
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, 'register');
-            },
-            /* style: ButtonStyle(
-                  overlayColor:
-                    MaterialStateProperty.all(Colors.red.withOpacity(0.1)), 
-                backgroundColor: MaterialStateProperty.all(Colors.brown),
-                shape: MaterialStateProperty.all(const StadiumBorder())), */
-            child: const Text(
-              'No Tienes Cuenta ? Registrarse !!',
-              style: TextStyle(
-                  //color: Colors.black,
-                  color: Color.fromRGBO(41, 60, 118, 10),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-            ),
-          ) */
         ],
       ),
     )));
@@ -68,7 +49,10 @@ class _LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormaProvider>(context);
     return Form(
-        //TODO Mantener la referencia la KEY para validar los elementos del formulario al presionar el boton
+        /*
+        *  Mantener la referencia la KEY para validar los elementos del formulario al presionar el boton
+        */
+
         key: loginForm.formKey,
         //Dispara las validaciones
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -136,11 +120,15 @@ class _LoginForm extends StatelessWidget {
                     : () async {
                         //quitar le teclado
                         FocusScope.of(context).unfocus();
-                        //TODO Login form
+                        /*
+                        *  Login Form
+                        */
                         if (!loginForm.isValidForm()) return;
                         loginForm.isLoading = true;
                         await Future.delayed(const Duration(seconds: 3));
-                        //TODO Validar si el login es corrrecto
+                        /*
+                        *  Validar si el login es corrrecto
+                        */
                         loginForm.isLoading = false;
 
                         final response =

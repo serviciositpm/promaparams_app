@@ -56,8 +56,8 @@ class RegisteredGuiasProvider extends ChangeNotifier {
       int cantescaneada,
       int sincronizado,
       int activo) {
-    final respuesta = DBProvider.db.insertGuiasRegMan(tipoproceso, noguia,
-        fechaguia, kg, piscina, cantescaneada, sincronizado, activo);
+    DBProvider.db.insertGuiasRegMan(tipoproceso, noguia, fechaguia, kg, piscina,
+        cantescaneada, sincronizado, activo);
     cargarGrRegistradas(tipoproceso);
     notifyListeners();
     return noguia;

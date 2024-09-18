@@ -253,6 +253,7 @@ class DataGuiasRegServicesCMP {
       /* BinGrAsignado()
               .updateBinesSincronizados(nroguia, 0, 1, nrobin); */
     } else {
+      // ignore: avoid_print
       print('Cod Error No se Inserto Registros');
     }
     return actualizado;
@@ -289,6 +290,7 @@ class DataGuiasRegServicesCMP {
         // se Eliminara e Insertara los registros en el detalle
         //BinReg
       }
+      // ignore: avoid_print
       print(decodedResp[0]['descmsg']);
 
       /* final binesAct = await RegisteredBinGuiasProvider()
@@ -297,6 +299,7 @@ class DataGuiasRegServicesCMP {
       /* BinGrAsignado()
               .updateBinesSincronizados(nroguia, 0, 1, nrobin); */
     } else {
+      // ignore: avoid_print
       print('Cod Error No se Inserto Registros');
     }
     return actualizado;

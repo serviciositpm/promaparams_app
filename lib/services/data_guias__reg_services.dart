@@ -53,6 +53,7 @@ class DataGuiasRegServices {
           flag = true;
         }
         /* final binesAct = await BinGrAsignado().updateEstadoGuia(nroguia, 0); */
+        // ignore: unused_local_variable
         final guiasRec = await RegisteredGuiasProvider().nuevaGuiaRegistrada(
             tipoproceso,
             nroguia,
@@ -110,6 +111,7 @@ class DataGuiasRegServices {
           String fechahoraing = guiasBin['fechahora'];
           int sincbin = guiasBin['sincronizado'];
           int actbin = guiasBin['activo'];
+          // ignore: unused_local_variable
           final guiasBinReg = await RegisteredBinGuiasProvider()
               .nuevaGuiaBinAsignadoReg(
                   tipoproceso, nroguia, bin, fechahoraing, sincbin, actbin);
@@ -140,14 +142,12 @@ class DataGuiasRegServices {
     final List<dynamic> decodedResp = convert.json.decode(response.body);
     final dynamic cod = decodedResp[0]['codmsg'];
     if (cod == 200) {
-      print('Se Inserto los Registros Normalmente');
+      // ignore: unused_local_variable
       final binesAct = await RegisteredBinGuiasProvider()
           .actualizarEstadosRegBin(nroguia, tipoproceso, 0, 1);
 
       /* BinGrAsignado()
               .updateBinesSincronizados(nroguia, 0, 1, nrobin); */
-    } else {
-      print('Cod Error No se Inserto Registros');
     }
     return actualizado;
   }
@@ -183,15 +183,12 @@ class DataGuiasRegServices {
         // se Eliminara e Insertara los registros en el detalle
         //BinReg
       }
-      print(decodedResp[0]['descmsg']);
 
       /* final binesAct = await RegisteredBinGuiasProvider()
           .actualizarEstadosRegBin(nroguia, tipoproceso, 0, 1); */
 
       /* BinGrAsignado()
               .updateBinesSincronizados(nroguia, 0, 1, nrobin); */
-    } else {
-      print('Cod Error No se Inserto Registros');
     }
     return actualizado;
   }
