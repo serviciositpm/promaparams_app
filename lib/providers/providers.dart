@@ -8,3 +8,5 @@ export 'package:promaparams_app/providers/farm_params_provider.dart';
 export 'package:promaparams_app/providers/registered_parameters_form_provider.dart';
 export 'package:promaparams_app/providers/pool_provider.dart';
 export 'package:promaparams_app/providers/cicles_provider.dart';
+export 'package:promaparams_app/providers/date_provider.dart';
+export 'package:promaparams_app/providers/year_provider.dart';

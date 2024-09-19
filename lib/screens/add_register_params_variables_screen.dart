@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:promaparams_app/providers/providers.dart';
 
-class AddRegisterParamsVariables extends StatefulWidget {
+class AddRegisterParamsVariables extends StatelessWidget {
   final String codCamaronera;
   final String descCamaronera;
   final String codParametro;
@@ -18,83 +18,17 @@ class AddRegisterParamsVariables extends StatefulWidget {
     super.key,
   });
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _AddRegisterParamsVariablesState createState() =>
-      _AddRegisterParamsVariablesState();
-}
-
-class _AddRegisterParamsVariablesState
-    extends State<AddRegisterParamsVariables> {
-  String? selectedPiscina;
-  String? selectedCiclo;
-  String? selectedAnio;
-  DateTime selectedDate = DateTime.now();
-  List<String> anios = []; // Lista para almacenar los años
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    // Inicializa la lista de años y carga las piscinas para el año actual
-    _loadYears();
-    _loadPiscinas();
-  }
-
-  void _loadYears() {
-    final currentYear = DateTime.now().year.toString();
-    setState(() {
-      anios = List.generate(
-          1, (index) => (int.parse(currentYear) - index).toString());
-      selectedAnio = currentYear; // Seleccionar el año actual por defecto
-    });
-  }
-
-  Future<void> _loadPiscinas() async {
-    // Obtener el usuario desde UserProvider
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final usuario = userProvider.usuario;
-
-    if (usuario != null && selectedAnio != null) {
-      // Llamar al provider para cargar las piscinas
-      Provider.of<PoolProvider>(context, listen: false).fetchPiscinas(
-        usuario: usuario,
-        camaronera: widget.codCamaronera,
-        anio: selectedAnio!,
-      );
-    }
-  }
-
-  Future<void> _loadCiclos(String codPiscina) async {
-    // Obtener el usuario desde UserProvider
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final usuario = userProvider.usuario;
-
-    if (usuario != null && selectedAnio != null) {
-      Provider.of<CiclesProvider>(context, listen: false).fetchCiclos(
-        usuario: usuario,
-        camaronera: widget.codCamaronera,
-        anio: selectedAnio!,
-        piscina: codPiscina,
-      );
-    }
-  }
-
   Future<void> _selectDate(BuildContext context) async {
+    final dateProvider = Provider.of<DateProvider>(context, listen: false);
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: dateProvider.selectedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
 
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+    if (picked != null && picked != dateProvider.selectedDate) {
+      dateProvider.setDate(picked);
     }
   }
 
@@ -102,6 +36,10 @@ class _AddRegisterParamsVariablesState
   Widget build(BuildContext context) {
     final piscinas = Provider.of<PoolProvider>(context).piscinas;
     final ciclos = Provider.of<CiclesProvider>(context).ciclos;
+    final dateProvider = Provider.of<DateProvider>(context);
+    final yearProvider = Provider.of<YearProvider>(context);
+    final poolProvider = Provider.of<PoolProvider>(context, listen: false);
+    final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -110,17 +48,11 @@ class _AddRegisterParamsVariablesState
       ),
       body: Column(
         children: [
-          const Divider(
-            height: 5,
-            color: Colors.transparent,
-          ),
+          const Divider(height: 5, color: Colors.transparent),
           _buildHeader(),
-          const Divider(
-            height: 5,
-            color: Colors.transparent,
-          ),
-          _buildRegistros(
-              piscinas, ciclos), // Pasamos piscinas y ciclos al método
+          const Divider(height: 5, color: Colors.transparent),
+          _buildRegistros(context, piscinas, ciclos, dateProvider, yearProvider,
+              poolProvider, ciclesProvider),
         ],
       ),
     );
@@ -131,7 +63,9 @@ class _AddRegisterParamsVariablesState
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       height: 65,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white),
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -167,14 +101,14 @@ class _AddRegisterParamsVariablesState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.descCamaronera,
+                    descCamaronera,
                     style: const TextStyle(
                         fontSize: 14,
                         color: AppTheme.primary,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    widget.descParametro,
+                    descParametro,
                     style: const TextStyle(
                         fontSize: 14,
                         color: AppTheme.primary,
@@ -189,69 +123,83 @@ class _AddRegisterParamsVariablesState
     );
   }
 
-  Widget _buildRegistros(List piscinas, List ciclos) {
+  Widget _buildRegistros(
+    BuildContext context,
+    List piscinas,
+    List ciclos,
+    DateProvider dateProvider,
+    YearProvider yearProvider,
+    PoolProvider poolProvider,
+    CiclesProvider ciclesProvider,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: 90,
+      height: 250,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white),
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.white,
+      ),
       child: Column(
         children: [
           ListTile(
-            title:
-                Text('Fecha: ${DateFormat('yyyy-MM-dd').format(selectedDate)}'),
+            title: Text(
+                'Fecha: ${DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate)}'),
             trailing: const Icon(Icons.calendar_today),
             onTap: () => _selectDate(context),
           ),
           DropdownButtonFormField<String>(
             hint: const Text('Seleccionar Año'),
-            value: selectedAnio,
-            items: anios.map((anio) {
+            value: yearProvider.selectedYear,
+            items: yearProvider.years.map((year) {
               return DropdownMenuItem<String>(
-                value: anio,
-                child: Text(anio),
+                value: year,
+                child: Text(year),
               );
             }).toList(),
             onChanged: (value) {
-              setState(() {
-                selectedAnio = value;
-                _loadPiscinas(); // Actualizar piscinas al seleccionar un nuevo año
-              });
+              yearProvider.setYear(value!);
+              poolProvider.fetchPiscinas(
+                usuario:
+                    Provider.of<UserProvider>(context, listen: false).usuario!,
+                camaronera: codCamaronera,
+                anio: value,
+              );
             },
           ),
           DropdownButtonFormField<String>(
             hint: const Text('Seleccionar Piscina'),
-            value: selectedPiscina,
-            items: piscinas
-                .map((p) => DropdownMenuItem<String>(
-                      value: p['codPiscina'],
-                      child: Text(p['numPiscina']!),
-                    ))
-                .toList(),
+            value: poolProvider.selectedPiscina,
+            items: piscinas.map((p) {
+              return DropdownMenuItem<String>(
+                value: p['codPiscina'],
+                child: Text(p['numPiscina']!),
+              );
+            }).toList(),
             onChanged: (value) {
-              setState(() {
-                selectedPiscina = value;
-              });
-              _loadCiclos(
-                  value!); // Cargar ciclos cuando se seleccione una piscina
+              poolProvider.setPiscina(value!);
+              ciclesProvider.clearCiclos();
+              ciclesProvider.fetchCiclos(
+                usuario:
+                    Provider.of<UserProvider>(context, listen: false).usuario!,
+                camaronera: codCamaronera,
+                anio: yearProvider.selectedYear!,
+                piscina: value,
+              );
             },
           ),
           DropdownButtonFormField<String>(
             hint: const Text('Seleccionar Ciclo'),
-            value: selectedCiclo,
-            items: ciclos
-                .map((c) => DropdownMenuItem<String>(
-                      value: c['ciclo'],
-                      child: Text(c['ciclo']!),
-                    ))
-                .toList(),
+            value: ciclesProvider.selectedCiclo,
+            items: ciclos.map((c) {
+              return DropdownMenuItem<String>(
+                value: c['ciclo'],
+                child: Text(c['ciclo']!),
+              );
+            }).toList(),
             onChanged: (value) {
-              setState(() {
-                selectedCiclo = value;
-              });
+              ciclesProvider.setCiclo(value!);
             },
           ),
-          // Aquí puedes continuar agregando el resto de la lógica para cargar y registrar datos
         ],
       ),
     );

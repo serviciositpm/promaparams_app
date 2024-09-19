@@ -5,9 +5,11 @@ class CiclesProvider with ChangeNotifier {
   final CiclesServices _ciclesService = CiclesServices();
   List<Map<String, String>> _ciclos = [];
   bool _isLoading = false;
+  String? _selectedCiclo;
 
   List<Map<String, String>> get ciclos => _ciclos;
   bool get isLoading => _isLoading;
+  String? get selectedCiclo => _selectedCiclo;
 
   Future<void> fetchCiclos({
     required String usuario,
@@ -30,6 +32,17 @@ class CiclesProvider with ChangeNotifier {
     }
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void setCiclo(String ciclo) {
+    _selectedCiclo = ciclo;
+    notifyListeners();
+  }
+
+  void clearCiclos() {
+    _ciclos = [];
+    _selectedCiclo = null;
     notifyListeners();
   }
 }

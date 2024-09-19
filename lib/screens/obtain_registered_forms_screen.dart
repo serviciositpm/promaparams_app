@@ -87,12 +87,6 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
               ),
             ),
           );
-          /*  Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NewScreen(), // Reemplaza con tu pantalla
-            ),
-          ); */
         },
         backgroundColor: AppTheme.primary,
         foregroundColor: AppTheme.blanco,
