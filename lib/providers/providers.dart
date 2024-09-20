@@ -10,3 +10,4 @@ export 'package:promaparams_app/providers/pool_provider.dart';
 export 'package:promaparams_app/providers/cicles_provider.dart';
 export 'package:promaparams_app/providers/date_provider.dart';
 export 'package:promaparams_app/providers/year_provider.dart';
+export 'package:promaparams_app/providers/variables_provider.dart';

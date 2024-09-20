@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'package:promaparams_app/providers/providers.dart';
 
 class AddRegisterParamsVariables extends StatelessWidget {
@@ -32,6 +32,56 @@ class AddRegisterParamsVariables extends StatelessWidget {
     }
   }
 
+  Future<void> _fetchVariables(BuildContext context) async {
+    final variablesProvider =
+        Provider.of<VariablesProvider>(context, listen: false);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final dateProvider = Provider.of<DateProvider>(context, listen: false);
+    final poolProvider = Provider.of<PoolProvider>(context, listen: false);
+    final yearProvider = Provider.of<YearProvider>(context, listen: false);
+    final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
+
+    await variablesProvider.fetchVariables(
+      usuario: userProvider.usuario!,
+      camaronera: codCamaronera,
+      anio: yearProvider.selectedYear!,
+      piscina: poolProvider.selectedPiscina!,
+      ciclo: ciclesProvider.selectedCiclo!,
+      fecha: DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate),
+      codForm: codParametro,
+    );
+  }
+
+  void _onPoolChange(BuildContext context) {
+    final variablesProvider =
+        Provider.of<VariablesProvider>(context, listen: false);
+    variablesProvider.clearVariables();
+  }
+
+  void _onCicloChange(BuildContext context) {
+    _fetchVariables(context);
+  }
+
+  Future<void> _deleteAllRecords(BuildContext context) async {
+    /*  final dbProvider =
+        Provider.of<LocalDatabaseProvider>(context, listen: false);
+    await dbProvider.deleteAll();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Registros eliminados')),
+    ); */
+  }
+
+  void _onVariableTap(BuildContext context, dynamic variable) {
+    /* Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VariableDetailForm(
+          variable: variable,
+        ),
+      ),
+    ); */
+  }
+
   @override
   Widget build(BuildContext context) {
     final piscinas = Provider.of<PoolProvider>(context).piscinas;
@@ -40,11 +90,17 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final yearProvider = Provider.of<YearProvider>(context);
     final poolProvider = Provider.of<PoolProvider>(context, listen: false);
     final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
-
+    final variablesProvider = Provider.of<VariablesProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registrar Parámetros'),
         foregroundColor: AppTheme.blanco,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () => _deleteAllRecords(context),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -53,6 +109,8 @@ class AddRegisterParamsVariables extends StatelessWidget {
           const Divider(height: 5, color: Colors.transparent),
           _buildRegistros(context, piscinas, ciclos, dateProvider, yearProvider,
               poolProvider, ciclesProvider),
+          const Divider(height: 5, color: Colors.transparent),
+          Expanded(child: _buildVariablesList(context, variablesProvider)),
         ],
       ),
     );
@@ -123,6 +181,29 @@ class AddRegisterParamsVariables extends StatelessWidget {
     );
   }
 
+  Widget _buildVariablesList(
+      BuildContext context, VariablesProvider variablesProvider) {
+    if (variablesProvider.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (variablesProvider.variables.isEmpty) {
+      return const Center(child: Text('No hay datos para mostrar'));
+    }
+
+    return ListView.builder(
+      itemCount: variablesProvider.variables.length,
+      itemBuilder: (context, index) {
+        final variable = variablesProvider.variables[index];
+        return ListTile(
+          title: Text(variable['nombre']),
+          subtitle: Text('Tipo: ${variable['tipoDato']}'),
+          onTap: () => _onVariableTap(context, variable),
+        );
+      },
+    );
+  }
+
   Widget _buildRegistros(
     BuildContext context,
     List piscinas,
@@ -134,71 +215,157 @@ class AddRegisterParamsVariables extends StatelessWidget {
   ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: 250,
+      height: 180,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
       ),
       child: Column(
         children: [
-          ListTile(
-            title: Text(
-                'Fecha: ${DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate)}'),
-            trailing: const Icon(Icons.calendar_today),
-            onTap: () => _selectDate(context),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Año:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.second,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    DropdownButtonFormField<String>(
+                      hint: const Text('Seleccionar Año'),
+                      value: yearProvider.selectedYear,
+                      items: yearProvider.years.map((year) {
+                        return DropdownMenuItem<String>(
+                          value: year,
+                          child: Text(year),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        yearProvider.setYear(value!);
+                        poolProvider.fetchPiscinas(
+                          usuario:
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .usuario!,
+                          camaronera: codCamaronera,
+                          anio: value,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Pisc #:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.second,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    DropdownButtonFormField<String>(
+                      hint: const Text('Seleccionar Piscina'),
+                      value: poolProvider.selectedPiscina,
+                      items: piscinas.map((p) {
+                        return DropdownMenuItem<String>(
+                          value: p['codPiscina'],
+                          child: Text(p['numPiscina']!),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        poolProvider.setPiscina(value!);
+                        ciclesProvider.clearCiclos();
+                        ciclesProvider.fetchCiclos(
+                          usuario:
+                              Provider.of<UserProvider>(context, listen: false)
+                                  .usuario!,
+                          camaronera: codCamaronera,
+                          anio: yearProvider.selectedYear!,
+                          piscina: value,
+                        );
+                        _onPoolChange(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          DropdownButtonFormField<String>(
-            hint: const Text('Seleccionar Año'),
-            value: yearProvider.selectedYear,
-            items: yearProvider.years.map((year) {
-              return DropdownMenuItem<String>(
-                value: year,
-                child: Text(year),
-              );
-            }).toList(),
-            onChanged: (value) {
-              yearProvider.setYear(value!);
-              poolProvider.fetchPiscinas(
-                usuario:
-                    Provider.of<UserProvider>(context, listen: false).usuario!,
-                camaronera: codCamaronera,
-                anio: value,
-              );
-            },
-          ),
-          DropdownButtonFormField<String>(
-            hint: const Text('Seleccionar Piscina'),
-            value: poolProvider.selectedPiscina,
-            items: piscinas.map((p) {
-              return DropdownMenuItem<String>(
-                value: p['codPiscina'],
-                child: Text(p['numPiscina']!),
-              );
-            }).toList(),
-            onChanged: (value) {
-              poolProvider.setPiscina(value!);
-              ciclesProvider.clearCiclos();
-              ciclesProvider.fetchCiclos(
-                usuario:
-                    Provider.of<UserProvider>(context, listen: false).usuario!,
-                camaronera: codCamaronera,
-                anio: yearProvider.selectedYear!,
-                piscina: value,
-              );
-            },
-          ),
-          DropdownButtonFormField<String>(
-            hint: const Text('Seleccionar Ciclo'),
-            value: ciclesProvider.selectedCiclo,
-            items: ciclos.map((c) {
-              return DropdownMenuItem<String>(
-                value: c['ciclo'],
-                child: Text(c['ciclo']!),
-              );
-            }).toList(),
-            onChanged: (value) {
-              ciclesProvider.setCiclo(value!);
-            },
+          const Divider(height: 10, color: Colors.transparent),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Ciclo:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.second,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    DropdownButtonFormField<String>(
+                      hint: const Text('Seleccionar Ciclo'),
+                      value: ciclesProvider.selectedCiclo,
+                      items: ciclos.map((ciclo) {
+                        return DropdownMenuItem<String>(
+                          value: ciclo['codCiclo'],
+                          child: Text(ciclo['nombreCiclo']!),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        ciclesProvider.setCiclo(value!);
+                        _onCicloChange(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Fecha:',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.second,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => _selectDate(context),
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                        child: Text(
+                          DateFormat('yyyy-MM-dd')
+                              .format(dateProvider.selectedDate),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

@@ -185,6 +185,9 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
           final registro = registrosProvider.registros[index];
           return GestureDetector(
             onTap: () {
+              /*
+              *  Aqui va cuando se quiera editar un registro
+              */
               // ignore: avoid_print
               print(
                   'Registro seleccionado: ${registro.piscina}, Ciclo: ${registro.ciclo}');
