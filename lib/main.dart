@@ -25,6 +25,7 @@ class AppsState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => YearProvider()),
         ChangeNotifierProvider(create: (_) => DateProvider()),
         ChangeNotifierProvider(create: (_) => VariablesProvider()),
+        ChangeNotifierProvider(create: (_) => FormVariableProvider()),
       ],
       child: const MyApp(),
     );

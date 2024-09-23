@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:promaparams_app/models/models.dart';
 
-class DBHelperRegisteredParams {
+class DBHelper {
   static Database? _database;
 
   Future<Database> get database async {
@@ -13,12 +13,13 @@ class DBHelperRegisteredParams {
 
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'registros.db');
+    final path = join(dbPath, 'app_data.db');
 
     return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
+        // Crear tabla para registros
         await db.execute('''
           CREATE TABLE registros(
             secRegistro INTEGER PRIMARY KEY,
@@ -34,9 +35,27 @@ class DBHelperRegisteredParams {
             sincronizado INTEGER
           )
         ''');
+
+        // Crear tabla para variables
+        await db.execute('''
+          CREATE TABLE variables(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario TEXT,
+            codCamaronera TEXT,
+            descCamaronera TEXT,
+            codParametro TEXT,
+            descParametro TEXT,
+            codVariable TEXT,
+            tipoDato TEXT,
+            nombre TEXT,
+            valorVariable TEXT
+          )
+        ''');
       },
     );
   }
+
+  // Métodos para registros
 
   Future<void> insertRegistro(Registro registro) async {
     final db = await database;
@@ -67,5 +86,33 @@ class DBHelperRegisteredParams {
     final db = await database;
     final res = await db.query('registros');
     return res.isNotEmpty ? res.map((e) => Registro.fromMap(e)).toList() : [];
+  }
+
+  // Métodos para variables
+
+  Future<void> insertVariable(Map<String, dynamic> data) async {
+    final db = await database;
+    await db.insert('variables', data);
+  }
+
+  Future<void> updateVariable(Map<String, dynamic> data) async {
+    final db = await database;
+    await db.update(
+      'variables',
+      {'valorVariable': data['valorVariable']},
+      where: 'codParametro = ? AND codVariable = ?',
+      whereArgs: [data['codParametro'], data['codVariable']],
+    );
+  }
+
+  Future<void> deleteAllVariables() async {
+    final db = await database;
+    await db.delete('variables');
+  }
+
+  Future<List<Map<String, dynamic>>> getVariables() async {
+    final db = await database;
+    final res = await db.query('variables');
+    return res.isNotEmpty ? res : [];
   }
 }

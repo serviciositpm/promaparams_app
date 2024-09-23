@@ -7,7 +7,7 @@ class RegisteredParameteresProvider with ChangeNotifier {
   List<Registro> _registros = [];
   bool isLoading = false;
   final ApiServiceRegisteredParams _apiService = ApiServiceRegisteredParams();
-  final DBHelperRegisteredParams _dbHelper = DBHelperRegisteredParams();
+  final DBHelper _dbHelper = DBHelper();
 
   List<Registro> get registros => _registros;
 

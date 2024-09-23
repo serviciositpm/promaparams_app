@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:provider/provider.dart';
 import 'package:promaparams_app/providers/providers.dart';
+import 'package:promaparams_app/screens/screens.dart';
 
 class AddRegisterParamsVariables extends StatelessWidget {
   final String codCamaronera;
@@ -41,15 +42,19 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final yearProvider = Provider.of<YearProvider>(context, listen: false);
     final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
 
-    await variablesProvider.fetchVariables(
-      usuario: userProvider.usuario!,
-      camaronera: codCamaronera,
-      anio: yearProvider.selectedYear!,
-      piscina: poolProvider.selectedPiscina!,
-      ciclo: ciclesProvider.selectedCiclo!,
-      fecha: DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate),
-      codForm: codParametro,
-    );
+    // Verifica que todos los datos estén disponibles antes de hacer la solicitud
+    if (poolProvider.selectedPiscina != null &&
+        ciclesProvider.selectedCiclo != null) {
+      await variablesProvider.fetchVariables(
+        usuario: userProvider.usuario!,
+        camaronera: codCamaronera,
+        anio: yearProvider.selectedYear!,
+        piscina: poolProvider.selectedPiscina!,
+        ciclo: ciclesProvider.selectedCiclo!,
+        fecha: DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate),
+        codForm: codParametro,
+      );
+    }
   }
 
   void _onPoolChange(BuildContext context) {
@@ -58,28 +63,39 @@ class AddRegisterParamsVariables extends StatelessWidget {
     variablesProvider.clearVariables();
   }
 
-  void _onCicloChange(BuildContext context) {
+  /* void _onCicloChange(BuildContext context) {
     _fetchVariables(context);
-  }
+  } */
 
   Future<void> _deleteAllRecords(BuildContext context) async {
-    /*  final dbProvider =
-        Provider.of<LocalDatabaseProvider>(context, listen: false);
-    await dbProvider.deleteAll();
+    final dbProvider = Provider.of<VariablesProvider>(context, listen: false);
+    dbProvider.clearVariables();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Registros eliminados')),
-    ); */
+    );
   }
 
   void _onVariableTap(BuildContext context, dynamic variable) {
-    /* Navigator.push(
+    // Asegurarse de que el valor sea String y manejar null
+    String codParametro = variable['codParametro'].toString();
+    String codVariable = variable['codVariable'].toString();
+    String nombre = variable['nombre']?.toString() ?? 'Desconocido';
+    String valorActual = variable['valorVariable']?.toString() ??
+        '0'; // Manejar null con un valor predeterminado
+    String tipoDato = variable['tipoDato'].toString();
+    // Redirigir al formulario de detalle de variable
+    Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => VariableDetailForm(
-          variable: variable,
+          codParametro: codParametro,
+          codVariable: codVariable,
+          nombre: nombre,
+          valorActual: valorActual,
+          tipoDato: tipoDato,
         ),
       ),
-    ); */
+    );
   }
 
   @override
@@ -248,13 +264,20 @@ class AddRegisterParamsVariables extends StatelessWidget {
                       }).toList(),
                       onChanged: (value) {
                         yearProvider.setYear(value!);
-                        poolProvider.fetchPiscinas(
+                        poolProvider
+                            .fetchPiscinas(
                           usuario:
                               Provider.of<UserProvider>(context, listen: false)
                                   .usuario!,
                           camaronera: codCamaronera,
                           anio: value,
-                        );
+                        )
+                            .then((_) {
+                          poolProvider.setPiscina(
+                              poolProvider.piscinas.isNotEmpty
+                                  ? poolProvider.piscinas.first['codPiscina']!
+                                  : '');
+                        });
                       },
                     ),
                   ],
@@ -286,15 +309,23 @@ class AddRegisterParamsVariables extends StatelessWidget {
                       onChanged: (value) {
                         poolProvider.setPiscina(value!);
                         ciclesProvider.clearCiclos();
-                        ciclesProvider.fetchCiclos(
-                          usuario:
-                              Provider.of<UserProvider>(context, listen: false)
-                                  .usuario!,
-                          camaronera: codCamaronera,
-                          anio: yearProvider.selectedYear!,
-                          piscina: value,
-                        );
-                        _onPoolChange(context);
+                        if (yearProvider.selectedYear != null &&
+                            poolProvider.selectedPiscina != null) {
+                          ciclesProvider
+                              .fetchCiclos(
+                            usuario: Provider.of<UserProvider>(context,
+                                    listen: false)
+                                .usuario!,
+                            camaronera: codCamaronera,
+                            anio: yearProvider.selectedYear!,
+                            piscina: value,
+                          )
+                              .then((_) {
+                            // ignore: use_build_context_synchronously
+                            _onPoolChange(context); // Limpiar variables
+                          });
+                        }
+                        /* _onPoolChange(context); */
                       },
                     ),
                   ],
@@ -323,13 +354,14 @@ class AddRegisterParamsVariables extends StatelessWidget {
                       value: ciclesProvider.selectedCiclo,
                       items: ciclos.map((ciclo) {
                         return DropdownMenuItem<String>(
-                          value: ciclo['codCiclo'],
-                          child: Text(ciclo['nombreCiclo']!),
+                          value: ciclo['ciclo'],
+                          child: Text(ciclo['ciclo']!),
                         );
                       }).toList(),
                       onChanged: (value) {
                         ciclesProvider.setCiclo(value!);
-                        _onCicloChange(context);
+                        /* _onCicloChange(context); */
+                        _fetchVariables(context);
                       },
                     ),
                   ],

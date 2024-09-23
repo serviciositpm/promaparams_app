@@ -11,3 +11,4 @@ export 'package:promaparams_app/providers/cicles_provider.dart';
 export 'package:promaparams_app/providers/date_provider.dart';
 export 'package:promaparams_app/providers/year_provider.dart';
 export 'package:promaparams_app/providers/variables_provider.dart';
+export 'package:promaparams_app/providers/variable_form_provider.dart';
