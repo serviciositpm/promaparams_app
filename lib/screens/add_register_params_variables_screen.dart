@@ -107,6 +107,8 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final poolProvider = Provider.of<PoolProvider>(context, listen: false);
     final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
     final variablesProvider = Provider.of<VariablesProvider>(context);
+    final detalleRegistrosProvider =
+        Provider.of<DetalleRegistrosProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registrar Parámetros'),
@@ -128,6 +130,10 @@ class AddRegisterParamsVariables extends StatelessWidget {
           const Divider(height: 5, color: Colors.transparent),
           Expanded(child: _buildVariablesList(context, variablesProvider)),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showSaveDialog(context, detalleRegistrosProvider),
+        child: const Icon(Icons.save),
       ),
     );
   }
@@ -199,6 +205,8 @@ class AddRegisterParamsVariables extends StatelessWidget {
 
   Widget _buildVariablesList(
       BuildContext context, VariablesProvider variablesProvider) {
+    const double tamanio = 12;
+    const double tamanioTitulo = 12;
     if (variablesProvider.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -206,8 +214,109 @@ class AddRegisterParamsVariables extends StatelessWidget {
     if (variablesProvider.variables.isEmpty) {
       return const Center(child: Text('No hay datos para mostrar'));
     }
+    return Expanded(
+      child: ListView.builder(
+        itemCount: variablesProvider.variables.length,
+        itemBuilder: (BuildContext context, int index) {
+          final variable = variablesProvider.variables[index];
+          return GestureDetector(
+            onTap: () => _onVariableTap(context, variable),
+            child: Container(
+              margin: const EdgeInsets.only(top: 5, bottom: 5),
+              width: double.infinity,
+              height: 90,
+              decoration: _cardBorders(),
+              child: Row(
+                children: [
+                  const Padding(padding: EdgeInsets.only(left: 15)),
+                  Expanded(
+                      child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Variable :',
+                          style: TextStyle(
+                              fontSize: tamanioTitulo,
+                              color: AppTheme.second,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Divider(height: 5, color: Colors.white),
+                        Text(
+                          'Tipo Dato :',
+                          style: TextStyle(
+                              fontSize: tamanioTitulo,
+                              color: AppTheme.second,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Divider(height: 5, color: Colors.white),
+                        Text(
+                          'Valor :',
+                          style: TextStyle(
+                              fontSize: tamanioTitulo,
+                              color: AppTheme.second,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  )),
+                  Expanded(
+                      child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          variable['nombre'],
+                          style: const TextStyle(
+                              fontSize: tamanio,
+                              color: AppTheme.primary,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const Divider(height: 5, color: Colors.white),
+                        Text(
+                          variable['tipoDato'],
+                          style: const TextStyle(
+                              fontSize: tamanio,
+                              color: AppTheme.primary,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const Divider(height: 5, color: Colors.white),
+                        Text(
+                          variable['valorVariable'] ??
+                              (variable['tipoDato'] == 'numeros' ? '0.00' : ''),
+                          style: const TextStyle(
+                              fontSize: tamanio,
+                              color: AppTheme.primary,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  )),
+                  //Sincronizado
+                  const Icon(Icons.cloud_done,
+                      size: 25, color: AppTheme.upload),
+                  const Padding(padding: EdgeInsets.only(right: 10)),
+                  //No Sincronizado
+                  const Icon(Icons.cloud_upload,
+                      size: 25, color: AppTheme.second),
+                  const Padding(padding: EdgeInsets.only(right: 10)),
+                  //Registro Creado
+                  const Icon(Icons.storage,
+                      size: 25, color: AppTheme.grisoscuro),
+                  const Padding(padding: EdgeInsets.only(right: 10)),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
 
-    return ListView.builder(
+    /* return ListView.builder(
       itemCount: variablesProvider.variables.length,
       itemBuilder: (context, index) {
         final variable = variablesProvider.variables[index];
@@ -217,7 +326,7 @@ class AddRegisterParamsVariables extends StatelessWidget {
           onTap: () => _onVariableTap(context, variable),
         );
       },
-    );
+    ); */
   }
 
   Widget _buildRegistros(
@@ -403,4 +512,110 @@ class AddRegisterParamsVariables extends StatelessWidget {
       ),
     );
   }
+
+  void _showSaveDialog(
+      BuildContext context, DetalleRegistrosProvider detalleRegistrosProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Guardar registros'),
+          content: const Text(
+              '¿Deseas guardar los registros en la base de datos local?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                _saveRecords(context,
+                    detalleRegistrosProvider); // Llama al método para guardar los registros
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: const Text('Guardar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _saveRecords(BuildContext context,
+      DetalleRegistrosProvider detalleRegistrosProvider) async {
+    final yearProvider = Provider.of<YearProvider>(context, listen: false);
+    final poolProvider = Provider.of<PoolProvider>(context, listen: false);
+    final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
+    final variablesProvider =
+        Provider.of<VariablesProvider>(context, listen: false);
+    /* final detalleRegistrosProvider =
+        Provider.of<DetalleRegistrosProvider>(context, listen: false); */
+
+    if (yearProvider.selectedYear == null ||
+        poolProvider.selectedPiscina == null ||
+        ciclesProvider.selectedCiclo == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Por favor, seleccione Año, Piscina y Ciclo')),
+      );
+      return;
+    }
+
+    Registro registro = Registro(
+        secRegistro: 0, // Cambia esto por el valor correcto
+        codCamaronera: codCamaronera,
+        descCamaronera: descCamaronera,
+        codFormParametro: int.parse(codParametro),
+        descFormParametro: descParametro,
+        fecRegistro: DateTime.now().toString(),
+        estadoRegistro: 'Pendiente',
+        anio: int.parse(yearProvider.selectedYear!),
+        piscina: poolProvider.selectedPiscina!,
+        ciclo: ciclesProvider.selectedCiclo!,
+        sincronizado: 0
+        // Otros campos del registro
+        );
+
+    List<DetalleRegistro> detalles =
+        variablesProvider.variables.map((variable) {
+      return DetalleRegistro(
+        secRegistro: 0, // Asegúrate de que el secRegistro sea el correcto
+        codVariable: variable['codVariable']?.toString() ?? 'desconocido',
+        valorVariable:
+            variable['valorVariable']?.toString() ?? '0', // Manejar null
+        tipoDato: variable['tipoDato']?.toString() ?? 'numeros',
+        codFormParametro:
+            int.tryParse(codParametro) ?? 0, // Manejar null y excepciones
+        // Otros campos del detalle (asegúrate de que también estén bien)
+        id: 0, // Completar con valores correctos
+        codCamaronera: codCamaronera, // Completar con valores correctos
+        descCamaronera: descCamaronera,
+        descFormParametro: descParametro,
+        fecRegistro: DateTime.now().toString(), // Fecha actual
+        estadoRegistro: 'Pendiente',
+        anio: int.parse(yearProvider.selectedYear!),
+        piscina: poolProvider.selectedPiscina!,
+        ciclo: ciclesProvider.selectedCiclo!,
+        nombre: variable['nombre'], // Completar según lo necesario
+        sincronizado: 0, // 0 si no está sincronizado
+      );
+    }).toList();
+
+    // Llamar al provider para guardar los datos
+    await detalleRegistrosProvider.insertarRegistrosDetalle(registro, detalles);
+
+    // Mostrar un SnackBar de confirmación
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Datos almacenados localmente')),
+    );
+  }
+
+  BoxDecoration _cardBorders() => BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, offset: Offset(0, 5), blurRadius: 10)
+        ],
+      );
 }
