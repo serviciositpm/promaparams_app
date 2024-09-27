@@ -112,6 +112,17 @@ class DBHelper {
     return res.isNotEmpty ? res.map((e) => Registro.fromMap(e)).toList() : [];
   }
 
+  // Obtener Cabecera de registros por Id del Registro de cabecera
+  Future<List<Registro>> getCabeceraPorId(int id) async {
+    final db = await database;
+    final res = await db.query(
+      'registros',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return res.isNotEmpty ? res.map((e) => Registro.fromMap(e)).toList() : [];
+  }
+
   // Métodos para variables
 
   Future<void> insertVariable(Map<String, dynamic> data) async {
@@ -140,7 +151,7 @@ class DBHelper {
     return res.isNotEmpty ? res : [];
   }
 
-  Future<void> insertarRegistrosDetalle(
+  Future<int> insertarRegistrosDetalle(
       Registro registro, List<DetalleRegistro> detalles) async {
     final db = await database;
 
@@ -155,6 +166,7 @@ class DBHelper {
       await db.insert('detalleregistros', detalleData,
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
+    return idRegistro;
   }
 
   Future<void> updateRegistroDetalle(

@@ -4,16 +4,22 @@ import 'package:promaparams_app/models/models.dart';
 
 class DetalleRegistrosProvider extends ChangeNotifier {
   List<DetalleRegistro> _detalles = [];
+  List<Registro> _cabecera = [];
+  int? _saveIdRegistro;
   final DBHelper _dbHelper = DBHelper();
 
   List<DetalleRegistro> get detalles => _detalles;
+  List<Registro> get cabecera => _cabecera;
+  int? get savedIdRegistro => _saveIdRegistro;
 
   // Método para insertar registros y sus detalles
-  Future<void> insertarRegistrosDetalle(
+  Future<int> insertarRegistrosDetalle(
       Registro registro, List<DetalleRegistro> detalles) async {
-    await _dbHelper.insertarRegistrosDetalle(registro, detalles);
+    int registroId =
+        await _dbHelper.insertarRegistrosDetalle(registro, detalles);
     _detalles.addAll(detalles);
-    notifyListeners(); // Notificar a toda la app sobre los cambios
+    notifyListeners();
+    return registroId; // Notificar a toda la app sobre los cambios
   }
 
   // Método para actualizar registros y sus detalles
@@ -51,9 +57,17 @@ class DetalleRegistrosProvider extends ChangeNotifier {
   }
 
   // Método para obtener detalles por Id Cabecera
-  Future<void> getDetallesPorId(int id) async {
+  Future<List<DetalleRegistro>> getDetallesPorId(int id) async {
     _detalles = await _dbHelper.getDetallesPorId(id);
     notifyListeners();
+    return _detalles;
+  }
+
+  // Método para obtener detalles por Id Cabecera
+  Future<List<Registro>> getCabeceraPorId(int id) async {
+    _cabecera = await _dbHelper.getCabeceraPorId(id);
+    notifyListeners();
+    return _cabecera;
   }
 
   // Método para obtener detalles por codVariable
@@ -65,6 +79,11 @@ class DetalleRegistrosProvider extends ChangeNotifier {
   // Método para reiniciar la lista de detalles
   void resetDetalles() {
     _detalles = [];
+    notifyListeners();
+  }
+
+  void saveIdRegistro(int idRegistro) {
+    _saveIdRegistro = idRegistro;
     notifyListeners();
   }
 }

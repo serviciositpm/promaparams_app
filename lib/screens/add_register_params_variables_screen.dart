@@ -41,19 +41,25 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final poolProvider = Provider.of<PoolProvider>(context, listen: false);
     final yearProvider = Provider.of<YearProvider>(context, listen: false);
     final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
-
+    final detalleRegistroProvider =
+        Provider.of<DetalleRegistrosProvider>(context, listen: false);
     // Verifica que todos los datos estén disponibles antes de hacer la solicitud
     if (poolProvider.selectedPiscina != null &&
         ciclesProvider.selectedCiclo != null) {
-      await variablesProvider.fetchVariables(
-        usuario: userProvider.usuario!,
-        camaronera: codCamaronera,
-        anio: yearProvider.selectedYear!,
-        piscina: poolProvider.selectedPiscina!,
-        ciclo: ciclesProvider.selectedCiclo!,
-        fecha: DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate),
-        codForm: codParametro,
-      );
+      // Primero busca en los registros locales
+      if (detalleRegistroProvider.savedIdRegistro != null ||
+          detalleRegistroProvider.savedIdRegistro == 0) {
+      } else {
+        await variablesProvider.fetchVariables(
+          usuario: userProvider.usuario!,
+          camaronera: codCamaronera,
+          anio: yearProvider.selectedYear!,
+          piscina: poolProvider.selectedPiscina!,
+          ciclo: ciclesProvider.selectedCiclo!,
+          fecha: DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate),
+          codForm: codParametro,
+        );
+      }
     }
   }
 
@@ -62,10 +68,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
         Provider.of<VariablesProvider>(context, listen: false);
     variablesProvider.clearVariables();
   }
-
-  /* void _onCicloChange(BuildContext context) {
-    _fetchVariables(context);
-  } */
 
   Future<void> _deleteAllRecords(BuildContext context) async {
     final dbProvider = Provider.of<VariablesProvider>(context, listen: false);
@@ -133,6 +135,8 @@ class AddRegisterParamsVariables extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showSaveDialog(context, detalleRegistrosProvider),
+        backgroundColor: AppTheme.primary,
+        foregroundColor: AppTheme.blanco,
         child: const Icon(Icons.save),
       ),
     );
@@ -315,18 +319,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
         },
       ),
     );
-
-    /* return ListView.builder(
-      itemCount: variablesProvider.variables.length,
-      itemBuilder: (context, index) {
-        final variable = variablesProvider.variables[index];
-        return ListTile(
-          title: Text(variable['nombre']),
-          subtitle: Text('Tipo: ${variable['tipoDato']}'),
-          onTap: () => _onVariableTap(context, variable),
-        );
-      },
-    ); */
   }
 
   Widget _buildRegistros(
@@ -602,12 +594,14 @@ class AddRegisterParamsVariables extends StatelessWidget {
     }).toList();
 
     // Llamar al provider para guardar los datos
-    await detalleRegistrosProvider.insertarRegistrosDetalle(registro, detalles);
+    int registroId = await detalleRegistrosProvider.insertarRegistrosDetalle(
+        registro, detalles);
 
+    detalleRegistrosProvider.saveIdRegistro(registroId);
     // Mostrar un SnackBar de confirmación
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Datos almacenados localmente')),
+      SnackBar(content: Text('Registro guardado con ID: $registroId')),
     );
   }
 
