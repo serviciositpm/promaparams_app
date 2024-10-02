@@ -5,10 +5,12 @@ class PoolProvider with ChangeNotifier {
   final PoolServices _piscinasService = PoolServices();
   List<Map<String, String>> _piscinas = [];
   String? _selectedPiscina;
+  String? _selectedDesPiscina;
   bool _isLoading = false;
 
   List<Map<String, String>> get piscinas => _piscinas;
   String? get selectedPiscina => _selectedPiscina;
+  String? get selectedDesPiscina => _selectedDesPiscina;
   bool get isLoading => _isLoading;
 
   Future<void> fetchPiscinas({
@@ -35,6 +37,11 @@ class PoolProvider with ChangeNotifier {
 
   void setPiscina(String piscina) {
     _selectedPiscina = piscina;
+    notifyListeners();
+  }
+
+  void setDesPiscina(String despiscina) {
+    _selectedDesPiscina = despiscina;
     notifyListeners();
   }
 }

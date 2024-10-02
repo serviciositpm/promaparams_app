@@ -8,6 +8,7 @@ class Registro {
   String estadoRegistro;
   int anio;
   String piscina;
+  String despiscina;
   String ciclo;
   int sincronizado;
 
@@ -21,6 +22,7 @@ class Registro {
     required this.estadoRegistro,
     required this.anio,
     required this.piscina,
+    required this.despiscina,
     required this.ciclo,
     required this.sincronizado,
   });
@@ -36,6 +38,7 @@ class Registro {
       estadoRegistro: map['estadoRegistro'],
       anio: map['anio'],
       piscina: map['piscina'],
+      despiscina: map['despiscina'],
       ciclo: map['ciclo'],
       sincronizado: map['sincronizado'],
     );
@@ -52,6 +55,7 @@ class Registro {
       'estadoRegistro': estadoRegistro,
       'anio': anio,
       'piscina': piscina,
+      'despiscina': despiscina,
       'ciclo': ciclo,
       'sincronizado': sincronizado,
     };

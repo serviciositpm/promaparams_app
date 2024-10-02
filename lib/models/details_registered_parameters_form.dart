@@ -10,6 +10,7 @@ class DetalleRegistro {
   final String estadoRegistro;
   final int anio;
   final String piscina;
+  final String despiscina;
   final String ciclo;
   final String codVariable;
   final String tipoDato;
@@ -29,6 +30,7 @@ class DetalleRegistro {
     required this.estadoRegistro,
     required this.anio,
     required this.piscina,
+    required this.despiscina,
     required this.ciclo,
     required this.codVariable,
     required this.tipoDato,
@@ -51,6 +53,7 @@ class DetalleRegistro {
       'estadoRegistro': estadoRegistro,
       'anio': anio,
       'piscina': piscina,
+      'despiscina': despiscina,
       'ciclo': ciclo,
       'codVariable': codVariable,
       'tipoDato': tipoDato,
@@ -74,6 +77,7 @@ class DetalleRegistro {
       estadoRegistro: map['estadoRegistro'],
       anio: map['anio'],
       piscina: map['piscina'],
+      despiscina: map['despiscina'],
       ciclo: map['ciclo'],
       codVariable: map['codVariable'],
       tipoDato: map['tipoDato'],

@@ -320,7 +320,8 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                             ),
                             const Divider(height: 5, color: Colors.white),
                             Text(
-                              registro.piscina.toString(),
+                              /* registro.piscina.toString(), */
+                              registro.despiscina.toString(),
                               style: const TextStyle(
                                   fontSize: tamanio,
                                   color: AppTheme.primary,

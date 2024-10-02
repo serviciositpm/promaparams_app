@@ -13,7 +13,7 @@ class DBHelper {
 
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'app_data_parametros.db');
+    final path = join(dbPath, 'app_promaparameters.db');
 
     return await openDatabase(
       path,
@@ -32,6 +32,7 @@ class DBHelper {
             estadoRegistro TEXT,
             anio INTEGER,
             piscina TEXT,
+            despiscina TEXT,
             ciclo TEXT,
             sincronizado INTEGER
           )
@@ -67,6 +68,7 @@ class DBHelper {
             estadoRegistro TEXT,
             anio INTEGER,
             piscina TEXT,
+            despiscina TEXT,
             ciclo TEXT,
             codVariable TEXT,
             tipoDato TEXT,
@@ -103,6 +105,48 @@ class DBHelper {
       'registros',
       where: 'secRegistro = ?',
       whereArgs: [secRegistro],
+    );
+  }
+
+  Future<List<Registro>> getRegistrosPorCamaroneraYParametro(
+      String codCamaronera, int codFormParametro) async {
+    final db = await database;
+    final res = await db.query(
+      'registros',
+      where: 'codCamaronera = ? AND codFormParametro = ?',
+      whereArgs: [codCamaronera, codFormParametro],
+    );
+    return res.isNotEmpty ? res.map((e) => Registro.fromMap(e)).toList() : [];
+  }
+
+  Future<void> insertRegistroPorCamaroneraYParametro(
+      Registro registro, String codCamaronera, int codFormParametro) async {
+    final db = await database;
+    await db.insert(
+      'registros',
+      registro.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> updateRegistroPorCamaroneraYParametro(
+      Registro registro, String codCamaronera, int codFormParametro) async {
+    final db = await database;
+    await db.update(
+      'registros',
+      registro.toMap(),
+      where: 'codCamaronera = ? AND codFormParametro = ?',
+      whereArgs: [codCamaronera, codFormParametro],
+    );
+  }
+
+  Future<void> deleteRegistroPorCamaroneraYParametro(
+      String codCamaronera, int codFormParametro) async {
+    final db = await database;
+    await db.delete(
+      'registros',
+      where: 'sincronizado=1 And codCamaronera = ? AND codFormParametro = ?  ',
+      whereArgs: [codCamaronera, codFormParametro],
     );
   }
 
