@@ -1,6 +1,6 @@
 import 'package:promaparams_app/screens/screens.dart';
 import 'package:promaparams_app/providers/providers.dart';
-import 'package:promaparams_app/services/services.dart';
+/* import 'package:promaparams_app/services/services.dart'; */
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +15,7 @@ class AppsState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ServicesProvider()),
+        /* ChangeNotifierProvider(create: (_) => ServicesProvider()), */
         /* ChangeNotifierProvider(create: (_) => ServicesProviderCMP()), */
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => CamaronerasProvider()),
@@ -27,6 +27,8 @@ class AppsState extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VariablesProvider()),
         ChangeNotifierProvider(create: (_) => FormVariableProvider()),
         ChangeNotifierProvider(create: (_) => DetalleRegistrosProvider()),
+        ChangeNotifierProvider(
+            create: (_) => SyncVariablesFormDetailsProvider()),
       ],
       child: const MyApp(),
     );

@@ -1,4 +1,4 @@
-import 'package:promaparams_app/providers/providers.dart';
+/* import 'package:promaparams_app/providers/providers.dart';
 import 'package:promaparams_app/services/services.dart';
 import 'package:flutter/material.dart';
 
@@ -295,3 +295,4 @@ class RegisteredBinGuiasProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+ */

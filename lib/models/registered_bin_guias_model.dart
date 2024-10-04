@@ -1,4 +1,4 @@
-// To parse this JSON data, do
+/* // To parse this JSON data, do
 //
 //     final registeredBinGuias = registeredBinGuiasFromJson(jsonString);
 
@@ -46,3 +46,4 @@ class RegisteredBinGuias {
         "sincronizado": sincronizado,
       };
 }
+ */

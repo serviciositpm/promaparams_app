@@ -103,7 +103,9 @@ class AddRegisterParamsVariables extends StatelessWidget {
       body: Column(
         children: [
           const Divider(height: 5, color: Colors.transparent),
-          _buildHeader(),
+          BuildHeader(
+              descCamaronera: descCamaronera, descParametro: descParametro),
+          /* _buildHeader(), */
           const Divider(height: 5, color: Colors.transparent),
           _buildRegistros(context, piscinas, ciclos, dateProvider, yearProvider,
               poolProvider, ciclesProvider),
@@ -117,74 +119,22 @@ class AddRegisterParamsVariables extends StatelessWidget {
                   : VariablesListParamsWidget(detalleRegistrosProvider)),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showSaveDialog(context, detalleRegistrosProvider),
-        backgroundColor: AppTheme.primary,
-        foregroundColor: AppTheme.blanco,
-        child: const Icon(Icons.save),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: 65,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-      ),
-      child: Row(
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Camaronera : ',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.second,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Parámetro : ',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.second,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
+          FloatingActionButton(
+            onPressed: () => _showSaveDialog(context, detalleRegistrosProvider),
+            backgroundColor: AppTheme.primary,
+            foregroundColor: AppTheme.blanco,
+            child: const Icon(Icons.save),
           ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    descCamaronera,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.primary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    descParametro,
-                    style: const TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.primary,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
+          const SizedBox(height: 10),
+          FloatingActionButtonSync(
+            context: context,
+            registeredParametersProvider: detalleRegistrosProvider,
+            backgroundColor: AppTheme.primary,
+            foregroundColor: AppTheme.blanco,
+            child: const Icon(Icons.sync),
           ),
         ],
       ),
@@ -283,12 +233,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
                         if (yearProvider.selectedYear != null &&
                             poolProvider.selectedPiscina != null) {
                           ciclesProvider.clearCiclos();
-
-                          // Mostrar un indicador de carga
-                          /* const snackBar =
-                              SnackBar(content: Text('Cargando ciclos...'));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
- */
                           // Cargar los ciclos basados en la piscina seleccionada
                           ciclesProvider
                               .fetchCiclos(
@@ -300,22 +244,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
                             piscina: value,
                           )
                               .then((_) {
-                            // Verificar si se cargaron ciclos correctamente
-                            /* if (ciclesProvider.ciclos.isNotEmpty) {
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content:
-                                        Text('Ciclos cargados correctamente')),
-                              );
-                            } else {
-                              // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('No se encontraron ciclos')),
-                              );
-                            }
- */
                             // Después de cargar los ciclos, asignar la descripción de la piscina
                             final piscinaSeleccionada = piscinas.firstWhere(
                               (p) => p['codPiscina'] == value,
@@ -336,63 +264,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
                                 content: Text('Por favor, selecciona un año')),
                           );
                         }
-
-                        // Obtener la descripción de la piscina seleccionada
-                        /* final piscinaSeleccionada = piscinas.firstWhere(
-                          (p) => p['codPiscina'] == value,
-                          orElse: () => null,
-                        );
-
-                        // Asignar descripción de la piscina si la piscina existe
-                        if (piscinaSeleccionada != null) {
-                          poolProvider.setDesPiscina(
-                              piscinaSeleccionada['numPiscina']!);
-                        } */
-
-                        /* if (yearProvider.selectedYear != null &&
-                            poolProvider.selectedPiscina != null) {
-                          ciclesProvider.clearCiclos();
-                          // Mostrar un indicador de carga para asegurar que la operación sea asincrónica
-                          const snackBar =
-                              SnackBar(content: Text('Cargando ciclos...'));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                          ciclesProvider.fetchCiclos(
-                            usuario: Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .usuario!,
-                            camaronera: codCamaronera,
-                            anio: yearProvider.selectedYear!,
-                            piscina: value,
-                          ); */
-
-                        /*  .then((_) {
-                            // ignore: use_build_context_synchronously
-                            _onPoolChange(context); // Limpiar variables
-                          }); */
-                        // Verificar si se cargaron ciclos
-                        /* if (ciclesProvider.ciclos.isNotEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('Ciclos cargados correctamente')),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('No se encontraron ciclos')),
-                            );
-                          } */
-
-                        // Limpiar variables si es necesario
-                        /* _onPoolChange(context); */
-                        /* } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Por favor, selecciona un año')),
-                          );
-                        } */
-                        /* _onPoolChange(context); */
                       },
                     ),
                   ],
@@ -520,6 +391,7 @@ class AddRegisterParamsVariables extends StatelessWidget {
     }
     final now = DateTime.now();
     Registro registro = Registro(
+        //id: 0,
         secRegistro: 0, // Cambia esto por el valor correcto
         codCamaronera: codCamaronera,
         descCamaronera: descCamaronera,
@@ -562,8 +434,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
         sincronizado: 0, // 0 si no está sincronizado
       );
     }).toList();
-    print('Guardado >>> $registro');
-    print('Guardado >>> $detalles');
     // Llamar al provider para guardar los datos
     int registroId = await detalleRegistrosProvider.insertarRegistrosDetalle(
         registro, detalles);

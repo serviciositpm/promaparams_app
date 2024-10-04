@@ -197,7 +197,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
               child: Container(
                 margin: const EdgeInsets.only(top: 5, bottom: 5),
                 width: double.infinity,
-                height: 85,
+                height: 110,
                 decoration: _cardBorders(),
                 child: Row(
                   children: [
@@ -210,7 +210,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sec.# :',
+                              'Sec. Sipe # :',
                               style: TextStyle(
                                   fontSize: tamanioTitulo,
                                   color: AppTheme.second,
@@ -229,6 +229,14 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                               'Ciclo : ',
                               style: TextStyle(
                                   fontSize: tamanioTitulo,
+                                  color: AppTheme.second,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Divider(height: 5, color: Colors.white),
+                            Text(
+                              'Id. Local : ',
+                              style: TextStyle(
+                                  fontSize: tamanio,
                                   color: AppTheme.second,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -261,6 +269,14 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                             const Divider(height: 5, color: Colors.white),
                             Text(
                               registro.ciclo,
+                              style: const TextStyle(
+                                  fontSize: tamanio,
+                                  color: AppTheme.primary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const Divider(height: 5, color: Colors.white),
+                            Text(
+                              registro.id.toString(),
                               style: const TextStyle(
                                   fontSize: tamanio,
                                   color: AppTheme.primary,

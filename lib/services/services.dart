@@ -7,3 +7,4 @@ export 'package:promaparams_app/services/obtain_data_registered_forms.dart';
 export 'package:promaparams_app/services/obtain_pool_services.dart';
 export 'package:promaparams_app/services/obtain_cicles_services.dart';
 export 'package:promaparams_app/services/obtain_variables.dart';
+export 'package:promaparams_app/services/sync_registers_variables_form_detail_service.dart';

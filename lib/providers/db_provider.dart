@@ -288,7 +288,7 @@ class DBProvider {
   //----------------------------------
   //Registro de Guias de Pesca con los Bines Asignados
   //----------------------------------
-  Future insertBinGrReg(RegisteredBinGuias binasignadas) async {
+  /* Future insertBinGrReg(RegisteredBinGuias binasignadas) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
@@ -305,7 +305,7 @@ class DBProvider {
     //print('Respuesta de la Insercion $resp');
 
     return binasignadas.nrobin;
-  }
+  } */
 
   //----------------------------------
   //Cantidad de Bines Escaneados
@@ -456,7 +456,7 @@ class DBProvider {
   //----------------------------------
   //Consulta de Guias Asinadas con los bines
   //----------------------------------
-  Future<List<RegisteredBinGuias>?> consultaBinAsignadasReg(
+  /* Future<List<RegisteredBinGuias>?> consultaBinAsignadasReg(
       String nroguia, String tipoproceso) async {
     // Get a reference to the database.
     final db = await databaseRead;
@@ -469,7 +469,7 @@ class DBProvider {
     return res.isNotEmpty
         ? res.map((e) => RegisteredBinGuias.fromJson(e)).toList()
         : [];
-  }
+  } */
 
   //----------------------------------
   //Borra de la tabla los bines escaneados de manera equivocada

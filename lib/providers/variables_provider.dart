@@ -98,9 +98,9 @@ class VariablesProvider extends ChangeNotifier {
     required String valorVariable,
   }) async {
     // ignore: avoid_print
-    print('Variables Parametro => $codParametro');
+    /* print('Variables Parametro => $codParametro');
     print('Variables Cod Variable => $codVariable');
-    print('Variables Valor => $valorVariable');
+    print('Variables Valor => $valorVariable'); */
 
     try {
       await _dbHelper.updateVariable({

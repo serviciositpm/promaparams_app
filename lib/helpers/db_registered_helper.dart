@@ -200,7 +200,8 @@ class DBHelper {
     final db = await database;
 
     // Insertar en la tabla 'registros'
-    int idRegistro = await db.insert('registros', registro.toMap(),
+    int idRegistro = await db.insert(
+        'registros', registro.toMap()..remove('id'),
         conflictAlgorithm: ConflictAlgorithm.replace);
 
     // Iterar sobre la lista de detalles y asociar el id del registro
@@ -243,14 +244,6 @@ class DBHelper {
   Future<void> deleteRegistroDetalle(
       int secRegistro, String codVariable, int codFormParametro) async {
     final db = await database;
-
-    // Eliminar de la tabla 'registros'
-    /* await db.delete(
-      'registros',
-      where: 'secRegistro = ?',
-      whereArgs: [secRegistro],
-    ); */
-
     // Eliminar detalles relacionados de la tabla 'detalleregistros'
     await db.delete(
       'detalleregistros',
@@ -258,15 +251,6 @@ class DBHelper {
       whereArgs: [secRegistro, codVariable, codFormParametro],
     );
   }
-
-  // Obtener todos los detalles de registros
-  /* Future<List<DetalleRegistro>> getDetallesRegistros() async {
-    final db = await database;
-    final res = await db.query('detalleregistros');
-    return res.isNotEmpty
-        /*? res.map((e) => DetalleRegistro.fromMap(e)).toList()*/
-        : [];
-  } */
 
   // Obtener detalles de registros por secRegistro
   Future<List<DetalleRegistro>> getDetallesPorSecRegistro(
@@ -307,5 +291,26 @@ class DBHelper {
     return res.isNotEmpty
         ? res.map((e) => DetalleRegistro.fromMap(e)).toList()
         : [];
+  }
+
+  // Método para actualizar el estado de sincronización en la tabla 'registros' y 'detalleregistros'
+  Future<void> marcarComoSincronizado(int id) async {
+    final db = await database;
+
+    // Actualizar el campo 'sincronizado' en la tabla 'registros'
+    await db.update(
+      'registros',
+      {'sincronizado': 1},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    // Actualizar el campo 'sincronizado' en la tabla 'detalleregistros'
+    await db.update(
+      'detalleregistros',
+      {'sincronizado': 1},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

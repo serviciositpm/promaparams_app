@@ -1,4 +1,5 @@
 class Registro {
+  int? id;
   int secRegistro;
   String codCamaronera;
   String descCamaronera;
@@ -13,6 +14,7 @@ class Registro {
   int sincronizado;
 
   Registro({
+    this.id,
     required this.secRegistro,
     required this.codCamaronera,
     required this.descCamaronera,
@@ -29,6 +31,7 @@ class Registro {
 
   factory Registro.fromMap(Map<String, dynamic> map) {
     return Registro(
+      id: map['id'],
       secRegistro: map['secRegistro'],
       codCamaronera: map['codCamaronera'],
       descCamaronera: map['descCamaronera'],
@@ -46,6 +49,7 @@ class Registro {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'secRegistro': secRegistro,
       'codCamaronera': codCamaronera,
       'descCamaronera': descCamaronera,
