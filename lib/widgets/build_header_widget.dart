@@ -5,10 +5,12 @@ import 'package:promaparams_app/themes/app_themes.dart';
 class BuildHeader extends StatelessWidget {
   final String descCamaronera;
   final String descParametro;
+  final String id;
 
   const BuildHeader({
     required this.descCamaronera,
     required this.descParametro,
+    required this.id,
     super.key,
   });
 
@@ -16,7 +18,7 @@ class BuildHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: 65,
+      height: 90,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
@@ -46,6 +48,14 @@ class BuildHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  Text(
+                    'Id : ',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppTheme.second,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -67,6 +77,14 @@ class BuildHeader extends StatelessWidget {
                   ),
                   Text(
                     descParametro,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppTheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    id,
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppTheme.primary,

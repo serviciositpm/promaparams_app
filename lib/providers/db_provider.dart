@@ -50,7 +50,7 @@ class DBProvider {
   //----------------------------------
   //Registro de Guias de Pesca que Vienen desde el API
   //----------------------------------
-  Future insertAsiganadas(AssiggrModel asignadas) async {
+  /* Future insertAsiganadas(AssiggrModel asignadas) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
@@ -68,7 +68,7 @@ class DBProvider {
 
     return asignadas.nroguia;
   }
-
+ */
   //----------------------------------
   //Registro de Guias de Pesca que Vienen desde el API
   //----------------------------------
@@ -140,7 +140,7 @@ class DBProvider {
   //Consulta de Guìas de Pesca que vinieron desde el API
   //----------------------------------
   // A method that retrieves all the dogs from the dogs table.
-  Future<List<AssiggrModel>?> consultaGrAsignadas(cedula, tipo) async {
+  /* Future<List<AssiggrModel>?> consultaGrAsignadas(cedula, tipo) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
@@ -150,7 +150,7 @@ class DBProvider {
     return res.isNotEmpty
         ? res.map((e) => AssiggrModel.fromJson(e)).toList()
         : [];
-  }
+  } */
 
   //----------------------------------
   //Consulta de Guìas de Pesca que vinieron desde el API
@@ -266,7 +266,7 @@ class DBProvider {
   //----------------------------------
   //Registro de Guias de Pesca con los Bines Asignados
   //----------------------------------
-  Future insertBinGrAsiganadas(BinesGrAsigModel binasignadas) async {
+  /* Future insertBinGrAsiganadas(BinesGrAsigModel binasignadas) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
@@ -284,7 +284,7 @@ class DBProvider {
 
     return binasignadas.nrobin;
   }
-
+ */
   //----------------------------------
   //Registro de Guias de Pesca con los Bines Asignados
   //----------------------------------
@@ -441,7 +441,7 @@ class DBProvider {
   //----------------------------------
   //Consulta de Guias Asinadas con los bines
   //----------------------------------
-  Future<List<BinesGrAsigModel>?> consultaBinAsignadas(String nroguia) async {
+  /*  Future<List<BinesGrAsigModel>?> consultaBinAsignadas(String nroguia) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
@@ -452,7 +452,7 @@ class DBProvider {
         ? res.map((e) => BinesGrAsigModel.fromJson(e)).toList()
         : [];
   }
-
+ */
   //----------------------------------
   //Consulta de Guias Asinadas con los bines
   //----------------------------------

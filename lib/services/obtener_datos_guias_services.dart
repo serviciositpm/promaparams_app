@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable
+/* // ignore_for_file: unused_local_variable
 
 import 'dart:convert' as convert;
 import 'package:promaparams_app/providers/providers.dart';
@@ -10,11 +10,11 @@ class DataGuiasRegServicesCMP {
   //final serverport = '10.20.4.173:8077'; //Servidor Desarrollo
   final serverport = '10.100.120.35:8077'; //Servidor Produccion
   bool isLoading = true;
-  final List<AssiggrModel> listadoGr = [];
+  /* final List<AssiggrModel> listadoGr = []; */
   bool insertados = false;
   DataGuiasRegServicesCMP();
 
-  Future<List<AssiggrModel>> loadGuiasRegistradas(
+  /* Future<List<AssiggrModel>> loadGuiasRegistradas(
       String nroguia, String opcion, String usuario) async {
     isLoading = true;
     //notificamos  a otro cualquier otro widget que se desea
@@ -52,7 +52,7 @@ class DataGuiasRegServicesCMP {
         final int cantbin = int.parse(guias['cant_bines'].toString());
         final int sincronizado = int.parse(guias['sincronizado'].toString());
         final int activo = int.parse(guias['activo'].toString());
-        final nuevaGuiaPesca = AssiggrModel(
+        /* final nuevaGuiaPesca = AssiggrModel(
           tipoproceso: guias['tipoproceso'],
           nroguia: guias['nro_guia'],
           fecha: guias['fec_pesc'],
@@ -65,9 +65,9 @@ class DataGuiasRegServicesCMP {
           sincronizado: sincronizado,
           activo: activo,
           fechahorareg: guias['fechahorareg'],
-        );
-        nuevaGuiaPesca.nroguia =
-            await DBProvider.db.insertAsiganadas(nuevaGuiaPesca);
+        ); */
+        /* nuevaGuiaPesca.nroguia =
+            await DBProvider.db.insertAsiganadas(nuevaGuiaPesca); */
         /*
           --------------------------------------------
             Obtiene e Inserta los bines y sus guias
@@ -127,7 +127,7 @@ class DataGuiasRegServicesCMP {
     //notificamos  a otro cualquier otro widget que se desea
     /* notifyListeners(); */
     return listadoGr;
-  }
+  } */
 
   //-------------------------------
   //Consumira APi q enviarà a guardar los datos a la tabla codesp
@@ -208,3 +208,4 @@ class DataGuiasRegServicesCMP {
     return actualizado;
   }
 }
+ */

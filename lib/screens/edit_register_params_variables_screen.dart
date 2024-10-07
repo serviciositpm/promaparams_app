@@ -6,33 +6,33 @@ import 'package:promaparams_app/providers/providers.dart';
 /* import 'package:promaparams_app/screens/screens.dart'; */
 import 'package:promaparams_app/widgets/widgets.dart';
 
-class AddRegisterParamsVariables extends StatelessWidget {
+class EditRegisterParamsVariables extends StatelessWidget {
   final String codCamaronera;
   final String descCamaronera;
   final String codParametro;
   final String descParametro;
+  final String secRegistro;
+  final String id;
+  final String ciclo;
+  final String anio;
+  final String piscina;
+  final String piscinades;
+  final String fecha;
 
-  const AddRegisterParamsVariables({
+  const EditRegisterParamsVariables({
     required this.codCamaronera,
     required this.descCamaronera,
     required this.codParametro,
     required this.descParametro,
+    required this.secRegistro,
+    required this.id,
+    required this.ciclo,
+    required this.anio,
+    required this.piscina,
+    required this.piscinades,
+    required this.fecha,
     super.key,
   });
-
-  Future<void> _selectDate(BuildContext context) async {
-    final dateProvider = Provider.of<DateProvider>(context, listen: false);
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: dateProvider.selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-    );
-
-    if (picked != null && picked != dateProvider.selectedDate) {
-      dateProvider.setDate(picked);
-    }
-  }
 
   Future<void> _fetchVariables(BuildContext context) async {
     final variablesProvider =
@@ -67,12 +67,6 @@ class AddRegisterParamsVariables extends StatelessWidget {
     }
   }
 
-  void _onPoolChange(BuildContext context) {
-    final variablesProvider =
-        Provider.of<VariablesProvider>(context, listen: false);
-    variablesProvider.clearVariables();
-  }
-
   Future<void> _deleteAllRecords(BuildContext context) async {
     final dbProvider = Provider.of<VariablesProvider>(context, listen: false);
     dbProvider.clearVariables();
@@ -89,7 +83,7 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final yearProvider = Provider.of<YearProvider>(context);
     final poolProvider = Provider.of<PoolProvider>(context, listen: false);
     final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
-    final variablesProvider = Provider.of<VariablesProvider>(context);
+    /* final variablesProvider = Provider.of<VariablesProvider>(context); */
     final detalleRegistrosProvider =
         Provider.of<DetalleRegistrosProvider>(context, listen: false);
     return Scaffold(
@@ -109,22 +103,27 @@ class AddRegisterParamsVariables extends StatelessWidget {
           BuildHeader(
               descCamaronera: descCamaronera,
               descParametro: descParametro,
-              id: detalleRegistrosProvider.savedIdRegistro != 0
-                  ? detalleRegistrosProvider.savedIdRegistro != null
-                      ? detalleRegistrosProvider.savedIdRegistro.toString()
-                      : ''
-                  : ''),
+              id: id),
           const Divider(height: 5, color: Colors.transparent),
-          _buildRegistros(context, piscinas, ciclos, dateProvider, yearProvider,
-              poolProvider, ciclesProvider),
+          _buildRegistros(
+              context,
+              piscinas,
+              ciclos,
+              dateProvider,
+              yearProvider,
+              poolProvider,
+              ciclesProvider,
+              id,
+              ciclo,
+              piscina,
+              anio,
+              fecha,
+              piscinades),
           const Divider(height: 5, color: Colors.transparent),
           Expanded(
-              child: detalleRegistrosProvider.savedIdRegistro == null ||
-                      detalleRegistrosProvider.savedIdRegistro == 0
-                  ? VariablesListWidget(variablesProvider: variablesProvider)
-                  : VariablesListParamsWidget(
-                      registroId:
-                          detalleRegistrosProvider.savedIdRegistro ?? 0)),
+              child: VariablesListParamsWidget(
+            registroId: int.parse(id),
+          )),
         ],
       ),
       floatingActionButton: Column(
@@ -150,17 +149,22 @@ class AddRegisterParamsVariables extends StatelessWidget {
   }
 
   Widget _buildRegistros(
-    BuildContext context,
-    List piscinas,
-    List ciclos,
-    DateProvider dateProvider,
-    YearProvider yearProvider,
-    PoolProvider poolProvider,
-    CiclesProvider ciclesProvider,
-  ) {
+      BuildContext context,
+      List piscinas,
+      List ciclos,
+      DateProvider dateProvider,
+      YearProvider yearProvider,
+      PoolProvider poolProvider,
+      CiclesProvider ciclesProvider,
+      idrec,
+      ciclorec,
+      piscinarec,
+      aniorec,
+      fecharec,
+      piscinadesrec) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-      height: 180,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      height: 110,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
@@ -182,32 +186,13 @@ class AddRegisterParamsVariables extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    DropdownButtonFormField<String>(
-                      hint: const Text('Seleccionar Año'),
-                      value: yearProvider.selectedYear,
-                      items: yearProvider.years.map((year) {
-                        return DropdownMenuItem<String>(
-                          value: year,
-                          child: Text(year),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        yearProvider.setYear(value!);
-                        poolProvider
-                            .fetchPiscinas(
-                          usuario:
-                              Provider.of<UserProvider>(context, listen: false)
-                                  .usuario!,
-                          camaronera: codCamaronera,
-                          anio: value,
-                        )
-                            .then((_) {
-                          poolProvider.setPiscina(
-                              poolProvider.piscinas.isNotEmpty
-                                  ? poolProvider.piscinas.first['codPiscina']!
-                                  : '');
-                        });
-                      },
+                    Text(
+                      aniorec,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -226,53 +211,13 @@ class AddRegisterParamsVariables extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    DropdownButtonFormField<String>(
-                      hint: const Text('Seleccionar Piscina'),
-                      value: poolProvider.selectedPiscina,
-                      items: piscinas.map((p) {
-                        return DropdownMenuItem<String>(
-                          value: p['codPiscina'],
-                          child: Text(p['numPiscina']!),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        poolProvider.setPiscina(value!);
-                        // Cargar ciclos antes de asignar la descripción
-                        if (yearProvider.selectedYear != null &&
-                            poolProvider.selectedPiscina != null) {
-                          ciclesProvider.clearCiclos();
-                          // Cargar los ciclos basados en la piscina seleccionada
-                          ciclesProvider
-                              .fetchCiclos(
-                            usuario: Provider.of<UserProvider>(context,
-                                    listen: false)
-                                .usuario!,
-                            camaronera: codCamaronera,
-                            anio: yearProvider.selectedYear!,
-                            piscina: value,
-                          )
-                              .then((_) {
-                            // Después de cargar los ciclos, asignar la descripción de la piscina
-                            final piscinaSeleccionada = piscinas.firstWhere(
-                              (p) => p['codPiscina'] == value,
-                              /* orElse: () => null, */
-                            );
-
-                            if (piscinaSeleccionada != null) {
-                              poolProvider.setDesPiscina(
-                                  piscinaSeleccionada['numPiscina']!);
-                            }
-                          });
-
-                          // Limpiar variables si es necesario
-                          _onPoolChange(context);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Por favor, selecciona un año')),
-                          );
-                        }
-                      },
+                    Text(
+                      piscinadesrec,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -295,20 +240,13 @@ class AddRegisterParamsVariables extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    DropdownButtonFormField<String>(
-                      hint: const Text('Seleccionar Ciclo'),
-                      value: ciclesProvider.selectedCiclo,
-                      items: ciclos.map((ciclo) {
-                        return DropdownMenuItem<String>(
-                          value: ciclo['ciclo'],
-                          child: Text(ciclo['ciclo']!),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        ciclesProvider.setCiclo(value!);
-                        /* _onCicloChange(context); */
-                        _fetchVariables(context);
-                      },
+                    Text(
+                      ciclorec,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -327,17 +265,12 @@ class AddRegisterParamsVariables extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    InkWell(
-                      onTap: () => _selectDate(context),
-                      child: InputDecorator(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        child: Text(
-                          DateFormat('yyyy-MM-dd')
-                              .format(dateProvider.selectedDate),
-                        ),
+                    Text(
+                      fecharec,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.primary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],

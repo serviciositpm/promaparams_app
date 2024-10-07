@@ -190,7 +190,27 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
               */
               // ignore: avoid_print
               print(
-                  'Registro seleccionado: ${registro.piscina}, Ciclo: ${registro.ciclo}');
+                  'Registro seleccionado: ${registro.piscina}, Ciclo: ${registro.ciclo} , Id: ${registro.id}');
+
+              // Navegar a la nueva pantalla con los parámetros
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditRegisterParamsVariables(
+                    codCamaronera: widget.codCamaronera,
+                    descCamaronera: widget.descCamaronera,
+                    codParametro: widget.codParametro,
+                    descParametro: widget.descParametro,
+                    secRegistro: registro.secRegistro.toString(),
+                    id: registro.id.toString(),
+                    ciclo: registro.ciclo,
+                    anio: registro.anio.toString(),
+                    piscina: registro.piscina,
+                    piscinades: registro.despiscina,
+                    fecha: registro.fecRegistro,
+                  ),
+                ),
+              );
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
