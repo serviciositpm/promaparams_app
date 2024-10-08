@@ -130,12 +130,15 @@ class AddRegisterParamsVariables extends StatelessWidget {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () => _showSaveDialog(context, detalleRegistrosProvider),
-            backgroundColor: AppTheme.primary,
-            foregroundColor: AppTheme.blanco,
-            child: const Icon(Icons.save),
-          ),
+          if (detalleRegistrosProvider.savedIdRegistro == null ||
+              detalleRegistrosProvider.savedIdRegistro == 0)
+            FloatingActionButton(
+              onPressed: () =>
+                  _showSaveDialog(context, detalleRegistrosProvider),
+              backgroundColor: AppTheme.primary,
+              foregroundColor: AppTheme.blanco,
+              child: const Icon(Icons.save),
+            ),
           const SizedBox(height: 10),
           FloatingActionButtonSync(
             context: context,
@@ -449,12 +452,13 @@ class AddRegisterParamsVariables extends StatelessWidget {
     detalleRegistrosProvider.saveIdRegistro(registroId);
     // Verifica si el registro fue exitoso y actualiza la interfaz si registroId es válido
     if (registroId > 0) {
+      // Limpiar las variables
+      variablesProvider.clearVariables();
       detalleRegistrosProvider.getDetallesPorId(registroId); // Cargar detalles
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registro guardado con ID: $registroId')),
+      );
     }
-    // Mostrar un SnackBar de confirmación
-    // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Registro guardado con ID: $registroId')),
-    );
   }
 }

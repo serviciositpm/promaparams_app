@@ -73,7 +73,6 @@ class DetalleRegistrosProvider extends ChangeNotifier {
     _setLoading(true); // Iniciar carga
     _detalles = await _dbHelper.getDetallesPorId(id);
     _setLoading(false); // Finalizar carga
-    print('Detalles $_detalles');
     return _detalles;
   }
 
@@ -98,7 +97,7 @@ class DetalleRegistrosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveIdRegistro(int idRegistro) {
+  void saveIdRegistro(int? idRegistro) {
     _saveIdRegistro = idRegistro;
     notifyListeners();
   }

@@ -44,7 +44,8 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
   Widget build(BuildContext context) {
     final registrosProvider =
         Provider.of<RegisteredParameteresProvider>(context);
-
+    final detalleRegistrosProvider =
+        Provider.of<DetalleRegistrosProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.descParametro),
@@ -76,6 +77,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          detalleRegistrosProvider.saveIdRegistro(null);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -98,7 +100,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
   // Método para la cabecera
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       height: 90,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: Colors.white),
@@ -213,7 +215,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 7),
               child: Container(
                 margin: const EdgeInsets.only(top: 5, bottom: 5),
                 width: double.infinity,

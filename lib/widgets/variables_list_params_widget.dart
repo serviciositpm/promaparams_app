@@ -47,6 +47,8 @@ class VariablesListParamsWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       const Padding(padding: EdgeInsets.only(left: 15)),
+                      const Icon(Icons.edit_document,
+                          size: 25, color: AppTheme.grisoscuro),
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -61,13 +63,6 @@ class VariablesListParamsWidget extends StatelessWidget {
                                     color: AppTheme.second,
                                     fontWeight: FontWeight.bold),
                               ),
-                              /* Text(
-                                detalle.nombre,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.primary,
-                                    fontWeight: FontWeight.bold),
-                              ), */
                               Divider(height: 5, color: Colors.white),
                               Text(
                                 'Tipo Dato :',
@@ -76,13 +71,6 @@ class VariablesListParamsWidget extends StatelessWidget {
                                     color: AppTheme.second,
                                     fontWeight: FontWeight.bold),
                               ),
-                              /* Text(
-                                detalle.tipoDato,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.primary,
-                                    fontWeight: FontWeight.bold),
-                              ), */
                               Divider(height: 5, color: Colors.white),
                               Text(
                                 'Valor :',
@@ -91,13 +79,6 @@ class VariablesListParamsWidget extends StatelessWidget {
                                     color: AppTheme.second,
                                     fontWeight: FontWeight.bold),
                               ),
-                              /* Text(
-                                detalle.valorVariable,
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.primary,
-                                    fontWeight: FontWeight.bold),
-                              ), */
                             ],
                           ),
                         ),
@@ -109,13 +90,6 @@ class VariablesListParamsWidget extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              /* Text(
-                                'Variable :',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.second,
-                                    fontWeight: FontWeight.bold),
-                              ), */
                               Text(
                                 detalle.nombre,
                                 style: const TextStyle(
@@ -124,13 +98,6 @@ class VariablesListParamsWidget extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                               const Divider(height: 5, color: Colors.white),
-                              /* Text(
-                                'Tipo Dato :',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.second,
-                                    fontWeight: FontWeight.bold),
-                              ), */
                               Text(
                                 detalle.tipoDato,
                                 style: const TextStyle(
@@ -139,13 +106,6 @@ class VariablesListParamsWidget extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                               const Divider(height: 5, color: Colors.white),
-                              /* Text(
-                                'Valor :',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.second,
-                                    fontWeight: FontWeight.bold),
-                              ), */
                               Text(
                                 detalle.valorVariable,
                                 style: const TextStyle(
@@ -153,15 +113,23 @@ class VariablesListParamsWidget extends StatelessWidget {
                                     color: AppTheme.primary,
                                     fontWeight: FontWeight.bold),
                               ),
+                              /* Text(
+                                detalle.sincronizado.toString(),
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    color: AppTheme.primary,
+                                    fontWeight: FontWeight.bold),
+                              ), */
                             ],
                           ),
                         ),
                       ),
-                      const Icon(Icons.cloud_done,
-                          size: 25, color: AppTheme.upload),
-                      const Padding(padding: EdgeInsets.only(right: 10)),
-                      const Icon(Icons.cloud_upload,
-                          size: 25, color: AppTheme.second),
+                      if (detalle.sincronizado == 1)
+                        const Icon(Icons.cloud_done,
+                            size: 25, color: AppTheme.upload),
+                      if (detalle.sincronizado == 0)
+                        const Icon(Icons.cloud_upload,
+                            size: 25, color: AppTheme.second),
                       const Padding(padding: EdgeInsets.only(right: 10)),
                       const Icon(Icons.storage,
                           size: 25, color: AppTheme.grisoscuro),

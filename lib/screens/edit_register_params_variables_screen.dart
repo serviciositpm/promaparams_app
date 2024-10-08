@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+/* import 'package:intl/intl.dart'; */
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:provider/provider.dart';
 import 'package:promaparams_app/providers/providers.dart';
@@ -34,7 +34,7 @@ class EditRegisterParamsVariables extends StatelessWidget {
     super.key,
   });
 
-  Future<void> _fetchVariables(BuildContext context) async {
+  /* Future<void> _fetchVariables(BuildContext context) async {
     final variablesProvider =
         Provider.of<VariablesProvider>(context, listen: false);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -65,7 +65,7 @@ class EditRegisterParamsVariables extends StatelessWidget {
         );
       }
     }
-  }
+  } */
 
   Future<void> _deleteAllRecords(BuildContext context) async {
     final dbProvider = Provider.of<VariablesProvider>(context, listen: false);
@@ -163,7 +163,7 @@ class EditRegisterParamsVariables extends StatelessWidget {
       fecharec,
       piscinadesrec) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       height: 110,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
