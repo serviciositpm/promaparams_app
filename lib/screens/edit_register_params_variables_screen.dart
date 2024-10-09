@@ -129,12 +129,14 @@ class EditRegisterParamsVariables extends StatelessWidget {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () => _showSaveDialog(context, detalleRegistrosProvider),
-            backgroundColor: AppTheme.primary,
-            foregroundColor: AppTheme.blanco,
-            child: const Icon(Icons.save),
-          ),
+          if (id == '0' || id == '')
+            FloatingActionButton(
+              onPressed: () =>
+                  _showSaveDialog(context, detalleRegistrosProvider),
+              backgroundColor: AppTheme.primary,
+              foregroundColor: AppTheme.blanco,
+              child: const Icon(Icons.save),
+            ),
           const SizedBox(height: 10),
           FloatingActionButtonSync(
             context: context,
