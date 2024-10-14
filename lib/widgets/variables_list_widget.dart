@@ -5,8 +5,13 @@ import 'package:promaparams_app/screens/screens.dart';
 
 class VariablesListWidget extends StatelessWidget {
   final VariablesProvider variablesProvider;
+  final int registroId;
 
-  const VariablesListWidget({super.key, required this.variablesProvider});
+  const VariablesListWidget({
+    super.key,
+    required this.variablesProvider,
+    required this.registroId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +32,8 @@ class VariablesListWidget extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           final variable = variablesProvider.variables[index];
           return GestureDetector(
-            onTap: () => _onVariableTap(context,
-                variable), // Asegúrate de que este método esté disponible.
+            onTap: () => _onVariableTap(context, variable,
+                registroId), // Asegúrate de que este método esté disponible.
             child: Container(
               margin: const EdgeInsets.only(top: 5, bottom: 5),
               width: double.infinity,
@@ -143,7 +148,7 @@ class VariablesListWidget extends StatelessWidget {
     );
   }
 
-  void _onVariableTap(BuildContext context, dynamic variable) {
+  void _onVariableTap(BuildContext context, dynamic variable, int registroId) {
     // Asegurarse de que el valor sea String y manejar null
     String codParametro = variable['codParametro'].toString();
     String codVariable = variable['codVariable'].toString();
@@ -151,6 +156,7 @@ class VariablesListWidget extends StatelessWidget {
     String valorActual = variable['valorVariable']?.toString() ??
         '0'; // Manejar null con un valor predeterminado
     String tipoDato = variable['tipoDato'].toString();
+    String codCamaronera = variable['codCamaronera'].toString();
     // Redirigir al formulario de detalle de variable
     Navigator.push(
       context,
@@ -161,6 +167,8 @@ class VariablesListWidget extends StatelessWidget {
           nombre: nombre,
           valorActual: valorActual,
           tipoDato: tipoDato,
+          registroId: registroId,
+          codCamaronera: codCamaronera,
         ),
       ),
     );

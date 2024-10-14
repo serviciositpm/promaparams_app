@@ -129,22 +129,24 @@ class EditRegisterParamsVariables extends StatelessWidget {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          if (id == '0' || id == '')
+          /* if (id == '0' || id == '')
             FloatingActionButton(
               onPressed: () =>
                   _showSaveDialog(context, detalleRegistrosProvider),
               backgroundColor: AppTheme.primary,
               foregroundColor: AppTheme.blanco,
               child: const Icon(Icons.save),
-            ),
+            ), */
           const SizedBox(height: 10),
-          FloatingActionButtonSync(
-            context: context,
-            registeredParametersProvider: detalleRegistrosProvider,
-            backgroundColor: AppTheme.primary,
-            foregroundColor: AppTheme.blanco,
-            child: const Icon(Icons.sync),
-          ),
+          if (id != '0' || id != '')
+            FloatingActionButtonSync(
+              context: context,
+              registeredParametersProvider: detalleRegistrosProvider,
+              backgroundColor: AppTheme.primary,
+              foregroundColor: AppTheme.blanco,
+              idRegistro: int.parse(id),
+              child: const Icon(Icons.sync),
+            ),
         ],
       ),
     );
@@ -285,7 +287,7 @@ class EditRegisterParamsVariables extends StatelessWidget {
     );
   }
 
-  void _showSaveDialog(
+  /* void _showSaveDialog(
       BuildContext context, DetalleRegistrosProvider detalleRegistrosProvider) {
     showDialog(
       context: context,
@@ -311,9 +313,9 @@ class EditRegisterParamsVariables extends StatelessWidget {
         );
       },
     );
-  }
+  } */
 
-  void _saveRecords(BuildContext context,
+  /* void _saveRecords(BuildContext context,
       DetalleRegistrosProvider detalleRegistrosProvider) async {
     final yearProvider = Provider.of<YearProvider>(context, listen: false);
     final poolProvider = Provider.of<PoolProvider>(context, listen: false);
@@ -391,5 +393,5 @@ class EditRegisterParamsVariables extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Registro guardado con ID: $registroId')),
     );
-  }
+  } */
 }

@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:promaparams_app/themes/app_themes.dart';
 import 'package:provider/provider.dart';
 import 'package:promaparams_app/providers/providers.dart';
-/* import 'package:promaparams_app/screens/screens.dart'; */
 import 'package:promaparams_app/widgets/widgets.dart';
 
 class AddRegisterParamsVariables extends StatelessWidget {
@@ -121,7 +120,9 @@ class AddRegisterParamsVariables extends StatelessWidget {
           Expanded(
               child: detalleRegistrosProvider.savedIdRegistro == null ||
                       detalleRegistrosProvider.savedIdRegistro == 0
-                  ? VariablesListWidget(variablesProvider: variablesProvider)
+                  ? VariablesListWidget(
+                      variablesProvider: variablesProvider,
+                      registroId: detalleRegistrosProvider.savedIdRegistro ?? 0)
                   : VariablesListParamsWidget(
                       registroId:
                           detalleRegistrosProvider.savedIdRegistro ?? 0)),
@@ -140,13 +141,16 @@ class AddRegisterParamsVariables extends StatelessWidget {
               child: const Icon(Icons.save),
             ),
           const SizedBox(height: 10),
-          FloatingActionButtonSync(
-            context: context,
-            registeredParametersProvider: detalleRegistrosProvider,
-            backgroundColor: AppTheme.primary,
-            foregroundColor: AppTheme.blanco,
-            child: const Icon(Icons.sync),
-          ),
+          if (detalleRegistrosProvider.savedIdRegistro != null ||
+              detalleRegistrosProvider.savedIdRegistro != 0)
+            FloatingActionButtonSync(
+              context: context,
+              registeredParametersProvider: detalleRegistrosProvider,
+              backgroundColor: AppTheme.primary,
+              foregroundColor: AppTheme.blanco,
+              idRegistro: detalleRegistrosProvider.savedIdRegistro ?? 0,
+              child: const Icon(Icons.sync),
+            ),
         ],
       ),
     );

@@ -46,7 +46,7 @@ class RegisteredParameteresProvider with ChangeNotifier {
       // Procesa la respuesta
       List<Registro> registrosNuevos =
           response.map<Registro>((item) => Registro.fromMap(item)).toList();
-
+      print('Api-Datos $registrosNuevos');
       // Inserta los nuevos registros en SQLite
       for (var registro in registrosNuevos) {
         await _dbHelper.insertRegistroPorCamaroneraYParametro(

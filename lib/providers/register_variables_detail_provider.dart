@@ -47,6 +47,46 @@ class DetalleRegistrosProvider extends ChangeNotifier {
     _setLoading(false); // Finalizar carga
   }
 
+  // Método para actualizar registros y sus detalles
+  Future<void> updateRegistroDetalleXId(
+      Registro registro, List<DetalleRegistro> detalles) async {
+    _setLoading(true); // Iniciar carga
+    await _dbHelper.updateRegistroDetalleXId(detalles);
+    // Actualizar la lista local y notificar cambios
+    _detalles = _detalles.map((detalle) {
+      if (detalle.id == registro.id) {
+        return detalles.firstWhere((d) => d.codVariable == detalle.codVariable,
+            orElse: () => detalle);
+      }
+      return detalle;
+    }).toList();
+    _setLoading(false); // Finalizar carga
+  }
+
+  // Actualizar una variable en la base de datos
+  Future<void> updateDetalleValorVariable({
+    required String codParametro,
+    required String codVariable,
+    required String valorVariable,
+    required int id,
+    required String codCamaronera,
+  }) async {
+    try {
+      await _dbHelper.updateDetalleValorVariable({
+        'codParametro': codParametro,
+        'codVariable': codVariable,
+        'valorVariable': valorVariable,
+        'id': id,
+        'codCamaronera': codCamaronera,
+      });
+      // Refrescar las variables por id
+      await getDetallesPorId(id);
+    } catch (e) {
+      // ignore: avoid_print
+      print('Error al actualizar la variable: $e');
+    }
+  }
+
   // Método para eliminar registros y sus detalles
   Future<void> deleteRegistroDetalle(
       int secRegistro, String codVariable, int codFormParametro) async {

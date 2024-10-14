@@ -7,6 +7,7 @@ class FloatingActionButtonSync extends StatelessWidget {
   final DetalleRegistrosProvider registeredParametersProvider;
   final Color backgroundColor;
   final Color foregroundColor;
+  final int idRegistro;
   final Widget child;
 
   const FloatingActionButtonSync({
@@ -14,6 +15,7 @@ class FloatingActionButtonSync extends StatelessWidget {
     required this.registeredParametersProvider,
     required this.backgroundColor,
     required this.foregroundColor,
+    required this.idRegistro,
     required this.child,
     super.key,
   });
@@ -21,42 +23,43 @@ class FloatingActionButtonSync extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final syncProvider = Provider.of<SyncVariablesFormDetailsProvider>(context);
-    final detalelRegistrosForm = Provider.of<DetalleRegistrosProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    /* final detalelRegistrosForm = Provider.of<DetalleRegistrosProvider>(context); */
 
     return FloatingActionButton(
       onPressed: syncProvider.isSyncing
           ? null
           : () async {
               // Obtener el id del registro desde el provider
-              final idRegistro = detalelRegistrosForm.savedIdRegistro;
+              /* final idRegistro = detalelRegistrosForm.savedIdRegistro; */
 
-              if (idRegistro != null) {
-                // Obtener los detalles de los registros por ID
-                final registrosDetalles = await registeredParametersProvider
-                    .getDetallesPorId(idRegistro);
+              // Obtener los detalles de los registros por ID
+              final registrosDetalles = await registeredParametersProvider
+                  .getDetallesPorId(idRegistro);
 
-                // Convertir los detalles a List<Map<String, dynamic>> para la sincronización
-                final registrosMap = registrosDetalles
-                    .map((detalle) => detalle.toMap())
-                    .toList();
+              // Convertir los detalles a List<Map<String, dynamic>> para la sincronización
+              /* final registrosMap =
+                  registrosDetalles.map((detalle) => detalle.toMap()).toList(); */
+              final registrosMap = registrosDetalles.map((detalle) {
+                final detalleMap = detalle.toMap();
 
-                // Llamar al método sync del provider
-                await syncProvider.syncData(registrosMap);
+                // Agregar codUsuario al mapa
+                detalleMap['codUsuario'] = userProvider.usuario;
 
-                // Mostrar notificación cuando se completa la sincronización
-                // ignore: use_build_context_synchronously
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(syncProvider.syncStatus)),
-                );
+                return detalleMap;
+              }).toList();
 
-                // Actualizar los registros después de la sincronización
-                /* await registeredParametersProvider.updateLocalDatabaseAfterSync(); */
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('No hay registros para sincronizar')),
-                );
-              }
+              // Llamar al método sync del provider
+              await syncProvider.syncData(registrosMap);
+
+              // Mostrar notificación cuando se completa la sincronización
+              // ignore: use_build_context_synchronously
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(syncProvider.syncStatus)),
+              );
+
+              // Actualizar los registros después de la sincronización
+              /* await registeredParametersProvider.updateLocalDatabaseAfterSync(); */
             },
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,

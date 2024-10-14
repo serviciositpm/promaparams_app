@@ -9,6 +9,8 @@ class VariableDetailForm extends StatefulWidget {
   final String nombre;
   final String valorActual;
   final String tipoDato;
+  final int registroId;
+  final String codCamaronera;
 
   const VariableDetailForm({
     super.key,
@@ -17,6 +19,8 @@ class VariableDetailForm extends StatefulWidget {
     required this.nombre,
     required this.valorActual,
     required this.tipoDato,
+    required this.registroId,
+    required this.codCamaronera,
   });
 
   @override
@@ -107,14 +111,30 @@ class _VariableDetailFormState extends State<VariableDetailForm> {
                               ? () {
                                   final nuevoValor = _valorController.text;
                                   if (nuevoValor.isNotEmpty) {
-                                    // Actualizar el valor en la base de datos a través del provider
-                                    Provider.of<VariablesProvider>(context,
-                                            listen: false)
-                                        .updateVariable(
-                                      codParametro: widget.codParametro,
-                                      codVariable: widget.codVariable,
-                                      valorVariable: nuevoValor,
-                                    );
+                                    if (widget.registroId > 0) {
+                                      //Insertar En el provider del detalle
+                                      final detalleRegistrosProvider =
+                                          Provider.of<DetalleRegistrosProvider>(
+                                              context,
+                                              listen: false);
+                                      detalleRegistrosProvider
+                                          .updateDetalleValorVariable(
+                                              codParametro: widget.codParametro,
+                                              codVariable: widget.codVariable,
+                                              valorVariable: nuevoValor,
+                                              id: widget.registroId,
+                                              codCamaronera:
+                                                  widget.codCamaronera);
+                                    } else {
+                                      // Actualizar el valor en la base de datos a través del provider
+                                      Provider.of<VariablesProvider>(context,
+                                              listen: false)
+                                          .updateVariable(
+                                        codParametro: widget.codParametro,
+                                        codVariable: widget.codVariable,
+                                        valorVariable: nuevoValor,
+                                      );
+                                    }
 
                                     // Mostrar alerta de éxito
                                     _showAlert(context,

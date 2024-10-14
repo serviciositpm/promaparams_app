@@ -217,15 +217,6 @@ class DBHelper {
   Future<void> updateRegistroDetalle(
       Registro registro, List<DetalleRegistro> detalles) async {
     final db = await database;
-
-    // Actualizar el registro principal
-    /* await db.update(
-      'registros',
-      registro.toMap(),
-      where: 'secRegistro = ?',
-      whereArgs: [registro.secRegistro],
-    ); */
-
     // Actualizar detalles del registro
     for (var detalle in detalles) {
       await db.update(
@@ -236,6 +227,41 @@ class DBHelper {
           detalle.secRegistro,
           detalle.codVariable,
           detalle.codFormParametro,
+        ],
+      );
+    }
+  }
+
+  Future<void> updateDetalleValorVariable(Map<String, dynamic> detalles) async {
+    final db = await database;
+    await db.update(
+      'detalleregistros',
+      {'valorVariable': detalles['valorVariable']},
+      where:
+          'codFormParametro = ? AND codVariable = ? And codCamaronera=? And id=?',
+      whereArgs: [
+        detalles['codParametro'],
+        detalles['codVariable'],
+        detalles['codCamaronera'],
+        detalles['id']
+      ],
+    );
+  }
+
+  Future<void> updateRegistroDetalleXId(List<DetalleRegistro> detalles) async {
+    final db = await database;
+    // Actualizar detalles del registro
+    for (var detalle in detalles) {
+      await db.update(
+        'detalleregistros',
+        detalle.toMap(),
+        where:
+            'id = ? AND codVariable = ? AND codFormParametro = ? And codCamaronera = ?',
+        whereArgs: [
+          detalle.id,
+          detalle.codVariable,
+          detalle.codFormParametro,
+          detalle.codCamaronera,
         ],
       );
     }

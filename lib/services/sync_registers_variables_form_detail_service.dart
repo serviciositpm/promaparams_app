@@ -12,7 +12,7 @@ class SyncVariablesFormDetailsService {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(registros),
       );
-
+      print('Api $registros');
       if (response.statusCode == 200) {
         // Decodificar la respuesta JSON
         final Map<String, dynamic> responseData = jsonDecode(response.body);

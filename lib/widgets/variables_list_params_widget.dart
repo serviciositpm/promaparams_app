@@ -162,6 +162,8 @@ class VariablesListParamsWidget extends StatelessWidget {
           nombre: detalle.nombre,
           valorActual: detalle.valorVariable,
           tipoDato: detalle.tipoDato,
+          registroId: registroId,
+          codCamaronera: detalle.codCamaronera,
         ),
       ),
     );
