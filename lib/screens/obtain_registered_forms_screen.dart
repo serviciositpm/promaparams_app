@@ -24,6 +24,12 @@ class RegisteredFormsScreen extends StatefulWidget {
 }
 
 class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
+  /* @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadRegistros();
+  } */
+
   @override
   void initState() {
     super.initState();
@@ -46,6 +52,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
         Provider.of<RegisteredParameteresProvider>(context);
     final detalleRegistrosProvider =
         Provider.of<DetalleRegistrosProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.descParametro),
@@ -193,7 +200,9 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
               // ignore: avoid_print
               print(
                   'Registro seleccionado: ${registro.piscina}, Ciclo: ${registro.ciclo} , Id: ${registro.id}');
-
+              final detalleRegistrosProvider =
+                  Provider.of<DetalleRegistrosProvider>(context, listen: false);
+              detalleRegistrosProvider.getDetallesPorId(registro.id ?? 0);
               // Navegar a la nueva pantalla con los parámetros
               Navigator.push(
                 context,

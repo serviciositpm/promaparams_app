@@ -15,8 +15,6 @@ class AppsState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        /* ChangeNotifierProvider(create: (_) => ServicesProvider()), */
-        /* ChangeNotifierProvider(create: (_) => ServicesProviderCMP()), */
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => CamaronerasProvider()),
         ChangeNotifierProvider(create: (_) => RegisteredParameteresProvider()),
@@ -60,37 +58,8 @@ class MyApp extends StatelessWidget {
               descParametro: '',
               codParametro: '',
             ),
-        /* 'registerbin': (_) =>
-            const AssigmentScreen(), //Registro de Bines Paso 1 */
-        /* 'exitplant': (_) =>
-            const ExitPlantListScreen(), //Lista de Guias -  Registro Salida de Planta
-        'arrivefarm': (_) =>
-            const ArriveFarmListScreen(), // Lista de Guias - Registro Llegada a Granja
-        'closebin': (_) =>
-            const MovilListoCMP(), // Lista de Guias - Cierre de Bines
-        'exitfarm': (_) =>
-            const SalidaGranjaCMP(), //Lista Guia Salida de Granja
-        'arriveplant': (_) =>
-            const LlegadaPlantaCMP(), //Lista Guia  - Llegada a planta
-        /*  'receptionbin': (_) =>
-            const ReceptionListScreen(), //Lista Guias Llegada Recepcion
-        'receivebin': (_) =>
-            const SupllyHopperListScreen(), */ //Lista Guias - Recibido Recepcion
-        'asigbin': (_) =>
-            const AssigmentBinScreen(), //Listado de Bines Asignados a las guias Paso 1
-        'binsalplan': (_) =>
-            const ExitPlantBinGuia(), //Bines Salidos de Planta con Guias
-        'exitplantscreen': (_) => const ExitPlantScreen(), */
-
-        //'product': (_) => const ProductScreen(),
       },
       theme: AppTheme.lighthTheme,
-
-      /* theme: ThemeData.light().copyWith(
-          scaffoldBackgroundColor: Colors.grey[300],
-          appBarTheme: const AppBarTheme(elevation: 0, color: Colors.indigo),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-              backgroundColor: Colors.indigo, elevation: 0)), */
     );
   }
 }

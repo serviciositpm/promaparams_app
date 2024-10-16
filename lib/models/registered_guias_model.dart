@@ -1,4 +1,4 @@
-// To parse this JSON data, do
+/* // To parse this JSON data, do
 //
 //     final registeredGuias = registeredGuiasFromJson(jsonString);
 
@@ -63,3 +63,4 @@ class RegisteredGuias {
       activo: activo,
       sincronizado: sincronizado);
 }
+ */

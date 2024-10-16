@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:promaparams_app/helpers/helpers.dart';
-import 'package:promaparams_app/models/models.dart';
+/* import 'package:promaparams_app/models/models.dart'; */
 
 class DetalleRegistrosProvider extends ChangeNotifier {
   List<DetalleRegistro> _detalles = [];
@@ -114,6 +114,15 @@ class DetalleRegistrosProvider extends ChangeNotifier {
     _detalles = await _dbHelper.getDetallesPorId(id);
     _setLoading(false); // Finalizar carga
     return _detalles;
+  }
+
+  // Método para limpiar las variables
+  void clearVariablesDetalle() async {
+    _setLoading(true);
+    _detalles = [];
+    // _detalles = await _dbHelper.getDetallesPorId(id);
+    _setLoading(false);
+    notifyListeners();
   }
 
   // Método para obtener cabecera por Id

@@ -84,6 +84,24 @@ class DetalleRegistro {
       nombre: map['nombre'],
       valorVariable: map['valorVariable'],
       sincronizado: map['sincronizado'],
+      /* secuencia: map['secuencia'] ?? 0, // Valor predeterminado si es nulo
+      id: map['id'] ?? 0,
+      secRegistro: map['secRegistro'] ?? 0,
+      codCamaronera: map['codCamaronera'] ?? '',
+      descCamaronera: map['descCamaronera'] ?? '',
+      codFormParametro: map['codFormParametro'] ?? 0,
+      descFormParametro: map['descFormParametro'] ?? '',
+      fecRegistro: map['fecRegistro'] ?? '',
+      estadoRegistro: map['estadoRegistro'] ?? '',
+      anio: map['anio'] ?? 0,
+      piscina: map['piscina'] ?? '',
+      despiscina: map['despiscina'] ?? '',
+      ciclo: map['ciclo'] ?? '',
+      codVariable: map['codVariable'] ?? '',
+      tipoDato: map['tipoDato'] ?? '',
+      nombre: map['nombre'] ?? '',
+      valorVariable: map['valorVariable'] ?? '',
+      sincronizado: map['sincronizado'] ?? 0, */
     );
   }
 }

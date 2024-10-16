@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:promaparams_app/models/models.dart';
+/* import 'package:promaparams_app/models/models.dart'; */
 import 'package:promaparams_app/services/services.dart';
 import 'package:promaparams_app/helpers/helpers.dart';
 
@@ -22,7 +22,9 @@ class RegisteredParameteresProvider with ChangeNotifier {
     await _dbHelper.deleteRegistroPorCamaroneraYParametro(
         codCamaronera, int.parse(codParametro));
     try {
-      // Llama al API
+      /*
+      * Llama al API de Cabecera
+      */
       final response = await _apiService.obtenerRegistrosParametros(
           opcion: 'CRP',
           usuario: 'breyes', // Aquí debes pasar el usuario real
@@ -32,8 +34,24 @@ class RegisteredParameteresProvider with ChangeNotifier {
           ciclo: '',
           fecha: '2024-09-01',
           codform: int.parse(codParametro));
-      // Verifica si el API devuelve "No hay datos registrados"
-      if (response.isNotEmpty && response.first['codMsg'] == 300) {
+      /*
+      * Llama al API de Detalle
+      */
+      final responseDet = await _apiService.obtenerRegistrosParametros(
+          opcion: 'DRP',
+          usuario: 'breyes', // Aquí debes pasar el usuario real
+          camaronera: codCamaronera,
+          anio: anio,
+          piscina: '',
+          ciclo: '',
+          fecha: '2024-09-01',
+          codform: int.parse(codParametro));
+
+      /*
+      * Verifica si el API devuelve "No hay datos registrados" Alt + 124 
+      */
+      if ((response.isNotEmpty && response.first['codMsg'] == 300) ||
+          (responseDet.isNotEmpty && responseDet.first['codMsg'] == 300)) {
         // ignore: avoid_print
         print(
             'Resultado Api >> No hay datos registrados para los parámetros proporcionados.');
@@ -41,22 +59,46 @@ class RegisteredParameteresProvider with ChangeNotifier {
         _registros = await _dbHelper.getRegistrosPorCamaroneraYParametro(
             codCamaronera, int.parse(codParametro));
         notifyListeners();
-        return; // Sale del método sin proceder con la inserción
+        return;
       }
-      // Procesa la respuesta
+      /*
+      *  Procesa la respuesta Tanto Cabecera como detalle
+      */
       List<Registro> registrosNuevos =
           response.map<Registro>((item) => Registro.fromMap(item)).toList();
-      print('Api-Datos $registrosNuevos');
-      // Inserta los nuevos registros en SQLite
+      List<DetalleRegistro> registrosNuevosDetalle = responseDet
+          .map<DetalleRegistro>((det) => DetalleRegistro.fromMap(det))
+          .toList();
+      /*
+      * Crear un mapa de detalles agrupados por `secRegistro`
+      */
+      /*
+      * Inserta los nuevos registros y sus detalles en SQLite
+      */
       for (var registro in registrosNuevos) {
-        await _dbHelper.insertRegistroPorCamaroneraYParametro(
-            registro, codCamaronera, int.parse(codParametro));
+        /*
+        * Insertar la cabecera y obtener el id generado
+        */
+        int idRegistro =
+            await _dbHelper.insertRegistroPorCamaroneraYParametroCab(
+                registro, codCamaronera, int.parse(codParametro));
+        /*
+        * Busca los detalles que corresponden a este registro (según secRegistro)
+        */
+        List<DetalleRegistro> detallesParaRegistro = registrosNuevosDetalle
+            .where((detalle) => detalle.secRegistro == registro.secRegistro)
+            .toList();
+
+        await _dbHelper.insertarRegistrosPorCamaroneraYDetalle(
+            detallesParaRegistro, idRegistro);
       }
-      // Obtén todos los registros de la BD local
+      /*
+      * Obtén todos los registros de la BD local
+      */
+
       _registros = await _dbHelper.getRegistrosPorCamaroneraYParametro(
           codCamaronera, int.parse(codParametro));
     } catch (e) {
-      // Manejo de error
       // ignore: avoid_print
       print('Error cargando registros: $e');
     }

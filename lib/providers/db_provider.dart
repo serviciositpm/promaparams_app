@@ -1,6 +1,6 @@
 // ignore: depend_on_referenced_packages
-import 'package:promaparams_app/models/models.dart';
-export 'package:promaparams_app/models/models.dart';
+/* import 'package:promaparams_app/models/models.dart'; */
+/* export 'package:promaparams_app/models/models.dart'; */
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart'; //aqui se usara para un sigleton , esto es para instanciarlos donde querramos
 
@@ -72,7 +72,7 @@ class DBProvider {
   //----------------------------------
   //Registro de Guias de Pesca que Vienen desde el API
   //----------------------------------
-  Future insertGuiasReg(RegisteredGuias registradas) async {
+  /*  Future insertGuiasReg(RegisteredGuias registradas) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
@@ -89,7 +89,7 @@ class DBProvider {
     //print('Respuesta de la Insercion $resp');
 
     return registradas.nroguia;
-  }
+  } */
 
   //----------------------------------
   //Registro de Guias de Pesca que Vienen desde el API de manera Manual
@@ -156,16 +156,16 @@ class DBProvider {
   //Consulta de Guìas de Pesca que vinieron desde el API
   //----------------------------------
   // A method that retrieves all the dogs from the dogs table.
-  Future<List<RegisteredGuias>?> consultaGrReg(String tipoproceso) async {
+  /* Future<List<RegisteredGuias>?> consultaGrReg(String tipoproceso) async {
     // Get a reference to the database.
     final db = await databaseRead;
 
     final res = await db
         .query('GuiasReg', where: 'tipoproceso = ? ', whereArgs: [tipoproceso]);
     return res.isNotEmpty
-        ? res.map((e) => RegisteredGuias.fromJson(e)).toList()
+       // ? res.map((e) => RegisteredGuias.fromJson(e)).toList()
         : [];
-  }
+  } */
 
   //----------------------------------
   //Eliminacion de las guias q no estan sincronizadas que vinieron desde el API

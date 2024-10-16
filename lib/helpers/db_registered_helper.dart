@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:promaparams_app/models/models.dart';
+export 'package:promaparams_app/models/models.dart';
 
 class DBHelper {
   static Database? _database;
@@ -13,7 +14,7 @@ class DBHelper {
 
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'app_promaparameters.db');
+    final path = join(dbPath, 'app_proma_params_cam.db');
 
     return await openDatabase(
       path,
@@ -124,9 +125,20 @@ class DBHelper {
     final db = await database;
     await db.insert(
       'registros',
-      registro.toMap(),
+      registro.toMap()..remove('id'),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<int> insertRegistroPorCamaroneraYParametroCab(
+      Registro registro, String codCamaronera, int codFormParametro) async {
+    final db = await database;
+    // Insertar en la tabla 'registros'
+    int idRegistro = await db.insert(
+        'registros', registro.toMap()..remove('id'),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+
+    return idRegistro;
   }
 
   Future<void> updateRegistroPorCamaroneraYParametro(
@@ -208,6 +220,28 @@ class DBHelper {
     for (var detalle in detalles) {
       Map<String, dynamic> detalleData = detalle.toMap();
       detalleData['id'] = idRegistro; // Asociar el id del registro principal
+      await db.insert('detalleregistros', detalleData,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+    return idRegistro;
+  }
+
+  Future<int> insertarRegistrosPorCamaroneraYDetalle(
+      List<DetalleRegistro> detalles, int idRegistro) async {
+    final db = await database;
+    /*
+    * Iterar sobre la lista de detalles y asociar el id del registro 
+    */
+    for (var detalle in detalles) {
+      Map<String, dynamic> detalleData = detalle.toMap();
+      /*
+      * Remover el campo 'secuencia' para que SQLite lo gestione como autoincrement
+      */
+      detalleData.remove('secuencia');
+      /*
+      * Asociar el id del registro principal 
+      */
+      detalleData['id'] = idRegistro;
       await db.insert('detalleregistros', detalleData,
           conflictAlgorithm: ConflictAlgorithm.replace);
     }

@@ -24,6 +24,9 @@ class FloatingActionButtonSync extends StatelessWidget {
   Widget build(BuildContext context) {
     final syncProvider = Provider.of<SyncVariablesFormDetailsProvider>(context);
     final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final detalleRegistros =
+        Provider.of<DetalleRegistrosProvider>(context, listen: false);
+
     /* final detalelRegistrosForm = Provider.of<DetalleRegistrosProvider>(context); */
 
     return FloatingActionButton(
@@ -51,6 +54,9 @@ class FloatingActionButtonSync extends StatelessWidget {
 
               // Llamar al método sync del provider
               await syncProvider.syncData(registrosMap);
+
+              detalleRegistros.clearVariablesDetalle();
+              detalleRegistros.getDetallesPorId(idRegistro);
 
               // Mostrar notificación cuando se completa la sincronización
               // ignore: use_build_context_synchronously

@@ -1,8 +1,8 @@
-import 'package:promaparams_app/providers/providers.dart';
+/* import 'package:promaparams_app/providers/providers.dart';
 /* import 'package:promaparams_app/models/models.dart'; */
 import 'package:flutter/material.dart';
 
-class RegisteredGuiasProvider extends ChangeNotifier {
+/* class RegisteredGuiasProvider extends ChangeNotifier {
   List<RegisteredGuias> registrados = [];
   /* List<BinesGrAsigModel> binAsignados = []; */
 
@@ -29,25 +29,25 @@ class RegisteredGuiasProvider extends ChangeNotifier {
     registrados.add(nuevaGuiaReg);
     notifyListeners();
     return nuevaGuiaReg;
-  }
+  } */
 
-  cargarGrRegistradas(String tipoproceso) async {
+  /* cargarGrRegistradas(String tipoproceso) async {
     final registrados = await DBProvider.db.consultaGrReg(tipoproceso);
     this.registrados = [...?registrados];
     notifyListeners();
-  }
+  } */
 
-  borrarGuiasRegistradas(String tipoproceso) async {
+ /*  borrarGuiasRegistradas(String tipoproceso) async {
     await DBProvider.db.borrarGuiasReg(tipoproceso);
     cargarGrRegistradas(tipoproceso);
   }
-
-  borrarRegGuiasxGuia(String tipoproceso, String nroguia) async {
+ */
+  /* borrarRegGuiasxGuia(String tipoproceso, String nroguia) async {
     await DBProvider.db.borrarRegGuiasDB(tipoproceso, nroguia);
     cargarGrRegistradas(tipoproceso);
-  }
+  } */
 
-  insertDatManual(
+  /* insertDatManual(
       String tipoproceso,
       String noguia,
       String fechaguia,
@@ -61,5 +61,6 @@ class RegisteredGuiasProvider extends ChangeNotifier {
     cargarGrRegistradas(tipoproceso);
     notifyListeners();
     return noguia;
-  }
+  } */
 }
+ */
