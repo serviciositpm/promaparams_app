@@ -90,12 +90,12 @@ class EditRegisterParamsVariables extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Registrar Parámetros'),
         foregroundColor: AppTheme.blanco,
-        actions: [
+        /* actions: [
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () => _deleteAllRecords(context),
           ),
-        ],
+        ], */
       ),
       body: Column(
         children: [

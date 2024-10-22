@@ -393,6 +393,7 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
     final variablesProvider =
         Provider.of<VariablesProvider>(context, listen: false);
+    final dateProvider = Provider.of<DateProvider>(context, listen: false);
     /* final detalleRegistrosProvider =
         Provider.of<DetalleRegistrosProvider>(context, listen: false); */
 
@@ -405,7 +406,7 @@ class AddRegisterParamsVariables extends StatelessWidget {
       );
       return;
     }
-    final now = DateTime.now();
+    final now = dateProvider.selectedDate;
     Registro registro = Registro(
         //id: 0,
         secRegistro: 0, // Cambia esto por el valor correcto

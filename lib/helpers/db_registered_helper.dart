@@ -14,7 +14,7 @@ class DBHelper {
 
   Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'app_proma_params_cam.db');
+    final path = join(dbPath, 'app_proma_params_gran.db');
 
     return await openDatabase(
       path,
