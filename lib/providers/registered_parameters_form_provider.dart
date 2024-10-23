@@ -18,10 +18,12 @@ class RegisteredParameteresProvider with ChangeNotifier {
   ) async {
     isLoading = true;
     notifyListeners();
-    // Elimina los registros locales antes de consumir el API
-    await _dbHelper.deleteRegistroPorCamaroneraYParametro(
-        codCamaronera, int.parse(codParametro));
     try {
+      /*
+      * Elimina los registros locales antes de consumir el API
+      */
+      await _dbHelper.deleteRegistroPorCamaroneraYParametro(
+          codCamaronera, int.parse(codParametro));
       /*
       * Llama al API de Cabecera
       */
@@ -50,14 +52,16 @@ class RegisteredParameteresProvider with ChangeNotifier {
       /*
       * Verifica si el API devuelve "No hay datos registrados" Alt + 124 
       */
-      if ((response.isNotEmpty && response.first['codMsg'] == 300) ||
-          (responseDet.isNotEmpty && responseDet.first['codMsg'] == 300)) {
+      if ((response.isEmpty) || (response.first['codMsg'] == 300)) {
         // ignore: avoid_print
         print(
             'Resultado Api >> No hay datos registrados para los parámetros proporcionados.');
         isLoading = false;
         _registros = await _dbHelper.getRegistrosPorCamaroneraYParametro(
             codCamaronera, int.parse(codParametro));
+        if (_registros.isEmpty) {
+          _registros = []; // Asegúrate de que la lista de registros esté vacía
+        }
         notifyListeners();
         return;
       }
@@ -101,6 +105,11 @@ class RegisteredParameteresProvider with ChangeNotifier {
     } catch (e) {
       // ignore: avoid_print
       print('Error cargando registros: $e');
+      _registros = [];
+    } finally {
+      // Asegurarse de detener la carga y notificar en cualquier caso
+      isLoading = false;
+      notifyListeners();
     }
 
     isLoading = false;

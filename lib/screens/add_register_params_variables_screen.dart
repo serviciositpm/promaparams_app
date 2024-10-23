@@ -394,6 +394,9 @@ class AddRegisterParamsVariables extends StatelessWidget {
     final variablesProvider =
         Provider.of<VariablesProvider>(context, listen: false);
     final dateProvider = Provider.of<DateProvider>(context, listen: false);
+    final registrosProvider =
+        Provider.of<RegisteredParameteresProvider>(context, listen: false);
+
     /* final detalleRegistrosProvider =
         Provider.of<DetalleRegistrosProvider>(context, listen: false); */
 
@@ -461,6 +464,8 @@ class AddRegisterParamsVariables extends StatelessWidget {
       // Limpiar las variables
       variablesProvider.clearVariables();
       detalleRegistrosProvider.getDetallesPorId(registroId); // Cargar detalles
+      registrosProvider.loadRegistros(
+          codCamaronera, codParametro, int.parse(yearProvider.selectedYear!));
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Registro guardado con ID: $registroId')),

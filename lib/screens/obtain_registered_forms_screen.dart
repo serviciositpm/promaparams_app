@@ -4,7 +4,7 @@ import 'package:promaparams_app/providers/providers.dart';
 import '../themes/app_themes.dart';
 import 'package:promaparams_app/screens/screens.dart';
 
-class RegisteredFormsScreen extends StatefulWidget {
+class RegisteredFormsScreen extends StatelessWidget {
   final String codCamaronera;
   final String descCamaronera;
   final String descParametro;
@@ -19,43 +19,24 @@ class RegisteredFormsScreen extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _RegisteredFormsScreenState createState() => _RegisteredFormsScreenState();
-}
-
-class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
-  /* @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadRegistros();
-  } */
-
-  @override
-  void initState() {
-    super.initState();
-    _loadRegistros();
-  }
-
-  Future<void> _loadRegistros() async {
-    final registrosProvider =
-        Provider.of<RegisteredParameteresProvider>(context, listen: false);
-    await registrosProvider.loadRegistros(
-      widget.codCamaronera,
-      widget.codParametro,
-      DateTime.now().year,
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final registrosProvider =
         Provider.of<RegisteredParameteresProvider>(context);
     final detalleRegistrosProvider =
         Provider.of<DetalleRegistrosProvider>(context, listen: false);
 
+    // Cargar los registros cuando se construye la pantalla
+    /* if (!registrosProvider.isLoading && registrosProvider.registros.isEmpty) {
+      registrosProvider.loadRegistros(
+        codCamaronera,
+        codParametro,
+        DateTime.now().year,
+      );
+    } */
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.descParametro),
+        title: Text(descParametro),
         foregroundColor: AppTheme.blanco,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -89,10 +70,10 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => AddRegisterParamsVariables(
-                codCamaronera: widget.codCamaronera,
-                descCamaronera: widget.descCamaronera,
-                codParametro: widget.codParametro,
-                descParametro: widget.descParametro,
+                codCamaronera: codCamaronera,
+                descCamaronera: descCamaronera,
+                codParametro: codParametro,
+                descParametro: descParametro,
               ),
             ),
           );
@@ -108,7 +89,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      height: 90,
+      height: 95,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20), color: Colors.white),
       child: Row(
@@ -153,14 +134,14 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.descCamaronera,
+                    descCamaronera,
                     style: const TextStyle(
                         fontSize: 14,
                         color: AppTheme.primary,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    widget.descParametro,
+                    descParametro,
                     style: const TextStyle(
                         fontSize: 14,
                         color: AppTheme.primary,
@@ -194,24 +175,17 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
           final registro = registrosProvider.registros[index];
           return GestureDetector(
             onTap: () {
-              /*
-              *  Aqui va cuando se quiera editar un registro
-              */
-              // ignore: avoid_print
-              print(
-                  'Registro seleccionado: ${registro.piscina}, Ciclo: ${registro.ciclo} , Id: ${registro.id}');
               final detalleRegistrosProvider =
                   Provider.of<DetalleRegistrosProvider>(context, listen: false);
               detalleRegistrosProvider.getDetallesPorId(registro.id ?? 0);
-              // Navegar a la nueva pantalla con los parámetros
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditRegisterParamsVariables(
-                    codCamaronera: widget.codCamaronera,
-                    descCamaronera: widget.descCamaronera,
-                    codParametro: widget.codParametro,
-                    descParametro: widget.descParametro,
+                    codCamaronera: codCamaronera,
+                    descCamaronera: descCamaronera,
+                    codParametro: codParametro,
+                    descParametro: descParametro,
                     secRegistro: registro.secRegistro.toString(),
                     id: registro.id.toString(),
                     ciclo: registro.ciclo,
@@ -241,7 +215,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sec. Sipe # :',
+                              '# Sipe :',
                               style: TextStyle(
                                   fontSize: tamanioTitulo,
                                   color: AppTheme.second,
@@ -325,7 +299,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Fec. :',
+                              'Fecha :',
                               style: TextStyle(
                                   fontSize: tamanioTitulo,
                                   color: AppTheme.second,
@@ -333,7 +307,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                             ),
                             Divider(height: 5, color: Colors.white),
                             Text(
-                              'Piscina : ',
+                              'Cód. Pisc : ',
                               style: TextStyle(
                                   fontSize: tamanioTitulo,
                                   color: AppTheme.second,
@@ -341,7 +315,15 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                             ),
                             Divider(height: 5, color: Colors.white),
                             Text(
-                              'Estado : ',
+                              '# Pisc : ',
+                              style: TextStyle(
+                                  fontSize: tamanioTitulo,
+                                  color: AppTheme.second,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Divider(height: 5, color: Colors.white),
+                            Text(
+                              'Estado: ',
                               style: TextStyle(
                                   fontSize: tamanioTitulo,
                                   color: AppTheme.second,
@@ -359,7 +341,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              registro.fecRegistro.toString(),
+                              registro.fecRegistro,
                               style: const TextStyle(
                                   fontSize: tamanio,
                                   color: AppTheme.primary,
@@ -367,8 +349,15 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                             ),
                             const Divider(height: 5, color: Colors.white),
                             Text(
-                              /* registro.piscina.toString(), */
-                              registro.despiscina.toString(),
+                              registro.piscina,
+                              style: const TextStyle(
+                                  fontSize: tamanio,
+                                  color: AppTheme.primary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const Divider(height: 5, color: Colors.white),
+                            Text(
+                              registro.despiscina,
                               style: const TextStyle(
                                   fontSize: tamanio,
                                   color: AppTheme.primary,
@@ -399,6 +388,7 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
                     if (registro.sincronizado == 0)
                       const Icon(Icons.cloud_upload,
                           size: 25, color: AppTheme.second),
+                    const Padding(padding: EdgeInsets.only(right: 10)),
                   ],
                 ),
               ),
@@ -411,9 +401,9 @@ class _RegisteredFormsScreenState extends State<RegisteredFormsScreen> {
 
   BoxDecoration _cardBorders() => BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(25),
         boxShadow: const [
-          BoxShadow(color: Colors.black12, offset: Offset(0, 5), blurRadius: 10)
+          BoxShadow(color: Colors.black12, offset: Offset(0, 5), blurRadius: 5)
         ],
       );
 }

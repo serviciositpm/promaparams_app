@@ -97,38 +97,49 @@ class _HomeScreenState extends State<HomeScreen> {
                         return ListTile(
                           title: Text(parametro['descParametro']),
                           leading: Icon(icon),
-                          onTap: () {
-                            final codParametro =
-                                parametro['codParametro']; // Conversión segura
+                          onTap: () async {
+                            final codParametro = parametro['codParametro'];
+                            final registrosProvider =
+                                Provider.of<RegisteredParameteresProvider>(
+                                    context,
+                                    listen: false);
 
-                            if (codParametro != null &&
-                                camaronerasProvider.selectedCamaronera !=
-                                    null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RegisteredFormsScreen(
-                                    codCamaronera:
-                                        camaronerasProvider.selectedCamaronera!,
-                                    descCamaronera: camaronerasProvider
-                                            .camaroneras
-                                            .firstWhere((cam) =>
-                                                cam['codCamaronera'] ==
-                                                camaronerasProvider
-                                                    .selectedCamaronera)[
-                                        'desCamaronera'],
-                                    descParametro: parametro['descParametro'],
-                                    codParametro:
-                                        codParametro, // Pasamos el int
+                            await registrosProvider.loadRegistros(
+                              camaronerasProvider.selectedCamaronera!,
+                              codParametro,
+                              DateTime.now().year,
+                            );
+
+                            // Verificar si el widget sigue montado antes de la navegación
+                            if (mounted) {
+                              if (codParametro != null &&
+                                  camaronerasProvider.selectedCamaronera !=
+                                      null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RegisteredFormsScreen(
+                                      codCamaronera: camaronerasProvider
+                                          .selectedCamaronera!,
+                                      descCamaronera: camaronerasProvider
+                                              .camaroneras
+                                              .firstWhere((cam) =>
+                                                  cam['codCamaronera'] ==
+                                                  camaronerasProvider
+                                                      .selectedCamaronera)[
+                                          'desCamaronera'],
+                                      descParametro: parametro['descParametro'],
+                                      codParametro: codParametro,
+                                    ),
                                   ),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Error: El parámetro no es un número válido o no se seleccionó una camaronera')),
-                              );
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Error: El parámetro no es un número válido o no se seleccionó una camaronera')),
+                                );
+                              }
                             }
                           },
                         );

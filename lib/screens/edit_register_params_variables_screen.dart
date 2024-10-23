@@ -67,13 +67,13 @@ class EditRegisterParamsVariables extends StatelessWidget {
     }
   } */
 
-  Future<void> _deleteAllRecords(BuildContext context) async {
+  /*  Future<void> _deleteAllRecords(BuildContext context) async {
     final dbProvider = Provider.of<VariablesProvider>(context, listen: false);
     dbProvider.clearVariables();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Registros eliminados')),
     );
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
