@@ -8,6 +8,9 @@ class FloatingActionButtonSync extends StatelessWidget {
   final Color backgroundColor;
   final Color foregroundColor;
   final int idRegistro;
+  final String codCamaronera;
+  final String codParametro;
+  final String anio;
   final Widget child;
 
   const FloatingActionButtonSync({
@@ -16,6 +19,9 @@ class FloatingActionButtonSync extends StatelessWidget {
     required this.backgroundColor,
     required this.foregroundColor,
     required this.idRegistro,
+    required this.codCamaronera,
+    required this.codParametro,
+    required this.anio,
     required this.child,
     super.key,
   });
@@ -27,7 +33,8 @@ class FloatingActionButtonSync extends StatelessWidget {
     final detalleRegistros =
         Provider.of<DetalleRegistrosProvider>(context, listen: false);
 
-    /* final detalelRegistrosForm = Provider.of<DetalleRegistrosProvider>(context); */
+    final registrosProvider =
+        Provider.of<RegisteredParameteresProvider>(context, listen: false);
 
     return FloatingActionButton(
       onPressed: syncProvider.isSyncing
@@ -57,7 +64,8 @@ class FloatingActionButtonSync extends StatelessWidget {
 
               detalleRegistros.clearVariablesDetalle();
               detalleRegistros.getDetallesPorId(idRegistro);
-
+              registrosProvider.loadRegistros(
+                  codCamaronera, codParametro, int.parse(anio));
               // Mostrar notificación cuando se completa la sincronización
               // ignore: use_build_context_synchronously
               ScaffoldMessenger.of(context).showSnackBar(

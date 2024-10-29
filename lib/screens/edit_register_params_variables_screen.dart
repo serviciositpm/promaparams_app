@@ -34,47 +34,6 @@ class EditRegisterParamsVariables extends StatelessWidget {
     super.key,
   });
 
-  /* Future<void> _fetchVariables(BuildContext context) async {
-    final variablesProvider =
-        Provider.of<VariablesProvider>(context, listen: false);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final dateProvider = Provider.of<DateProvider>(context, listen: false);
-    final poolProvider = Provider.of<PoolProvider>(context, listen: false);
-    final yearProvider = Provider.of<YearProvider>(context, listen: false);
-    final ciclesProvider = Provider.of<CiclesProvider>(context, listen: false);
-    final detalleRegistroProvider =
-        Provider.of<DetalleRegistrosProvider>(context, listen: false);
-    // Verifica que todos los datos estén disponibles antes de hacer la solicitud
-    if (poolProvider.selectedPiscina != null &&
-        ciclesProvider.selectedCiclo != null) {
-      // Primero busca en los registros locales
-      if (detalleRegistroProvider.savedIdRegistro != null ||
-          detalleRegistroProvider.savedIdRegistro == 0) {
-        variablesProvider.clearVariables();
-        detalleRegistroProvider
-            .getDetallesPorId(detalleRegistroProvider.savedIdRegistro!);
-      } else {
-        await variablesProvider.fetchVariables(
-          usuario: userProvider.usuario!,
-          camaronera: codCamaronera,
-          anio: yearProvider.selectedYear!,
-          piscina: poolProvider.selectedPiscina!,
-          ciclo: ciclesProvider.selectedCiclo!,
-          fecha: DateFormat('yyyy-MM-dd').format(dateProvider.selectedDate),
-          codForm: codParametro,
-        );
-      }
-    }
-  } */
-
-  /*  Future<void> _deleteAllRecords(BuildContext context) async {
-    final dbProvider = Provider.of<VariablesProvider>(context, listen: false);
-    dbProvider.clearVariables();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Registros eliminados')),
-    );
-  } */
-
   @override
   Widget build(BuildContext context) {
     final piscinas = Provider.of<PoolProvider>(context).piscinas;
@@ -145,6 +104,9 @@ class EditRegisterParamsVariables extends StatelessWidget {
               backgroundColor: AppTheme.primary,
               foregroundColor: AppTheme.blanco,
               idRegistro: int.parse(id),
+              anio: anio,
+              codCamaronera: codCamaronera,
+              codParametro: codParametro,
               child: const Icon(Icons.sync),
             ),
         ],
