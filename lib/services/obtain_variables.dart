@@ -12,7 +12,8 @@ class ApiVariablesServices {
     required String codForm,
   }) async {
     final url = Uri.parse(
-        'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/obtenerregistrosparametros?opcion=DVP&usuario=$usuario&camaronera=$camaronera&anio=$anio&piscina=$piscina&ciclo=$ciclo&fecha=$fecha&codform=$codForm');
+        /* 'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/obtenerregistrosparametros?opcion=DVP&usuario=$usuario&camaronera=$camaronera&anio=$anio&piscina=$piscina&ciclo=$ciclo&fecha=$fecha&codform=$codForm'); */
+        'http://10.100.120.35:8185/api-app-registro-prametros-camaroneras/obtenerregistrosparametros?opcion=DVP&usuario=$usuario&camaronera=$camaronera&anio=$anio&piscina=$piscina&ciclo=$ciclo&fecha=$fecha&codform=$codForm');
 
     final response = await http.get(url);
 

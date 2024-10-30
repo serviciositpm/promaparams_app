@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 class ApiFarmService {
   final String apiUrl =
-      'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/obtenercamaronerasxusuario';
+      /* 'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/obtenercamaronerasxusuario'; */
+      'http://10.100.120.35:8185/api-app-registro-prametros-camaroneras/obtenercamaronerasxusuario';
 
   Future<List<Map<String, dynamic>>?> obtenerCamaroneras(String usuario) async {
     final response = await http.get(Uri.parse(

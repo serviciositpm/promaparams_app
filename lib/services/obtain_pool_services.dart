@@ -8,7 +8,8 @@ class PoolServices {
     required String anio,
   }) async {
     final url = Uri.parse(
-      'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/obtenercamaronerasxusuario?opcion=PIS&usuario=$usuario&camaronera=$camaronera&anio=$anio&piscina=&ciclo=',
+      /* 'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/obtenercamaronerasxusuario?opcion=PIS&usuario=$usuario&camaronera=$camaronera&anio=$anio&piscina=&ciclo=', */
+      'http://10.100.120.35:8185/api-app-registro-prametros-camaroneras/obtenercamaronerasxusuario?opcion=PIS&usuario=$usuario&camaronera=$camaronera&anio=$anio&piscina=&ciclo=',
     );
 
     final response = await http.get(url);

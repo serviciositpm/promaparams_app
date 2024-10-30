@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 class ApiServiceRegisteredParams {
   final String baseUrl =
-      'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras';
+      /* 'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras'; */
+      'http://10.100.120.35:8185/api-app-registro-prametros-camaroneras';
 
   Future<List<dynamic>> obtenerRegistrosParametros(
       {required String opcion,

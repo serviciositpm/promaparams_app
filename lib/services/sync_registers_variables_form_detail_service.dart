@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 
 class SyncVariablesFormDetailsService {
   final String apiUrl =
-      'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/insertaractualizarregistrosparametros';
+      /* 'http://10.20.4.195:8185/api-app-registro-prametros-camaroneras/insertaractualizarregistrosparametros'; */
+      'http://10.100.120.35:8185/api-app-registro-prametros-camaroneras/insertaractualizarregistrosparametros';
 
   Future<bool> syncData(List<Map<String, dynamic>> registros) async {
     try {
